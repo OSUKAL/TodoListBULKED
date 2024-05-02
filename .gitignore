@@ -1,0 +1,8 @@
+﻿/.idea/
+bin/
+obj/
+Debug/
+Release/
+*.log
+*.tlog
+*.user
