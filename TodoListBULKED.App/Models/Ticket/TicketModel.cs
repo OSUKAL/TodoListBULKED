@@ -1,4 +1,6 @@
-﻿namespace TodoListBULKED.App.Models.Ticket;
+﻿using TodoLIstBULKED.Infrastructure.Enums;
+
+namespace TodoListBULKED.App.Models.Ticket;
 
 /// <summary>
 /// Модель данных задачи
@@ -11,19 +13,24 @@ public class TicketModel
     public Guid Id { get; init; }
     
     /// <summary>
-    /// Идентификатор пользователя
+    /// Идентификатор исполнителя
     /// </summary>
     public Guid UserId { get; init; }
     
     /// <summary>
+    /// Идентификатор создателя
+    /// </summary>
+    public Guid CreatorId { get; init; }
+    
+    /// <summary>
     /// Состояние
     /// </summary>
-    public string State { get; init; }
+    public TicketState State { get; init; }
     
     /// <summary>
     /// Приоритет
     /// </summary>
-    public int Priority { get; init; }
+    public TicketPriority Priority { get; init; }
     
     /// <summary>
     /// Название

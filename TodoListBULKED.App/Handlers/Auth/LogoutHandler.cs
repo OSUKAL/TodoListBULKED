@@ -36,10 +36,10 @@ public class LogoutHandler
         }
         catch (Exception exception)
         {
-            const string errorText = "При выходе из аккаунта возникла ошибка";
-            _logger.LogError(exception, errorText);
+            const string ErrorText = "При выходе из аккаунта возникла ошибка";
+            _logger.LogError(exception, ErrorText);
             
-            return Result.Fail(errorText);
+            return Result.Fail(ErrorText);
         }
     }
 }

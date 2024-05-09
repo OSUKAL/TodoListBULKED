@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoListBULKED.App.Handlers.Ticket;
 using TodoListBULKED.App.Models.Requests.Ticket;
-using TodoLIstBULKED.Inrastructure.Cookie;
+using TodoLIstBULKED.Infrastructure.Cookie;
+using TodoLIstBULKED.Infrastructure.Cookie.Constants;
 
 namespace TodoListBULKED.API.Controllers;
 
@@ -30,7 +31,7 @@ public class TicketController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> CreateAsync([FromBody] CreateTicketRequest request, CancellationToken cancellationToken)
     {
-        var userIdResult = _cookieGetter.GetValueFromCookie("UserId");
+        var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaims.UserId);
 
         Console.WriteLine(userIdResult);
         

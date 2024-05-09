@@ -1,5 +1,4 @@
-﻿using TodoListBULKED.App.Models;
-using TodoListBULKED.App.Models.Ticket;
+﻿using TodoListBULKED.App.Models.Ticket;
 
 namespace TodoListBULKED.App.Abstractions;
 

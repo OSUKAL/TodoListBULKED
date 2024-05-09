@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Models.Requests.Ticket;
 using TodoListBULKED.App.Models.Ticket;
+using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.App.Handlers.Ticket;
 
@@ -21,6 +22,12 @@ public class CreateTicketHandler
         _logger = logger;
     }
 
+    /// <summary>
+    /// Обработка создания задачи
+    /// </summary>
+    /// <param name="request">Запрос на создание задачи</param>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
     public async Task<Result> HandleAsync(CreateTicketRequest request, Guid userId, CancellationToken cancellationToken)
     {
         try
@@ -28,8 +35,9 @@ public class CreateTicketHandler
             var ticket = new TicketModel
             {
                 Id = Guid.NewGuid(),
-                UserId = userId,
-                State = "In progress",
+                UserId = request.UserId,
+                CreatorId = userId,
+                State = TicketState.InProgress,
                 Priority = request.Priority,
                 Name = request.Name,
                 Description = request.Description
@@ -41,10 +49,10 @@ public class CreateTicketHandler
         }
         catch (Exception exception)
         {
-            const string errorText = "При создании задачи возникла ошибка";
-            _logger.LogError(exception, errorText);
+            const string ErrorText = "При создании задачи возникла ошибка";
+            _logger.LogError(exception, ErrorText);
 
-            return Result.Fail(errorText);
+            return Result.Fail(ErrorText);
         }
     }
 }

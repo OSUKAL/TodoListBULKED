@@ -8,10 +8,8 @@ namespace TodoListBULKED.Data.Context;
 /// </summary>
 public sealed class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        
     }
 
     /// <summary>

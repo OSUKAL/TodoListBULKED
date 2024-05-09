@@ -5,10 +5,11 @@ using Npgsql;
 using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Handlers.Auth;
 using TodoListBULKED.App.Handlers.Ticket;
+using TodoListBULKED.App.Handlers.User;
 using TodoListBULKED.Data.Configuration;
 using TodoListBULKED.Data.Context;
 using TodoListBULKED.Data.Repositories;
-using TodoLIstBULKED.Inrastructure.Cookie;
+using TodoLIstBULKED.Infrastructure.Cookie;
 
 namespace TodoListBULKED.API.Dependencies;
 
@@ -23,6 +24,7 @@ public static class DependenciesExtension
             .AddBaseDependencies(configuration)
             .AddDatabaseDependencies()
             .AddAuthDependencies()
+            .AddUserDependencies()
             .AddTicketDependencies();
     }
 
@@ -38,10 +40,15 @@ public static class DependenciesExtension
             });
         
         return services
-            .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped<CreateUserHandler>()
             .AddScoped<LoginHandler>()
             .AddScoped<LogoutHandler>();
+    }
+
+    private static IServiceCollection AddUserDependencies(this IServiceCollection services)
+    {
+        return services
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<CreateUserHandler>();
     }
 
     private static IServiceCollection AddTicketDependencies(this IServiceCollection services)

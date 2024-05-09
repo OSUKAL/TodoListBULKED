@@ -1,5 +1,4 @@
 ﻿using TodoListBULKED.App.Abstractions;
-using TodoListBULKED.App.Models;
 using TodoListBULKED.App.Models.Ticket;
 using TodoListBULKED.Data.Context;
 using TodoListBULKED.Data.Models;
@@ -25,6 +24,7 @@ public class TicketRepository : ITicketRepository
             {
                 Id = ticketModel.Id,
                 UserId = ticketModel.UserId,
+                CreatorId = ticketModel.CreatorId,
                 State = ticketModel.State,
                 Priority = ticketModel.Priority,
                 Name = ticketModel.Name,

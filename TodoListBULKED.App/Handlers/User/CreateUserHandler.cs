@@ -1,11 +1,10 @@
 ﻿using FluentResults;
 using Microsoft.Extensions.Logging;
 using TodoListBULKED.App.Abstractions;
-using TodoListBULKED.App.Models;
 using TodoListBULKED.App.Models.Requests.Auth;
 using TodoListBULKED.App.Models.User;
 
-namespace TodoListBULKED.App.Handlers.Auth;
+namespace TodoListBULKED.App.Handlers.User;
 
 /// <summary>
 /// Обработчик создания пользователя
@@ -26,7 +25,7 @@ public class CreateUserHandler
     /// Обработка создания пользователя
     /// </summary>
     /// <param name="request">Запрос на создание пользователя</param>
-    /// <param name="cancellationToken">Токен омтены операции</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
     public async Task<Result> HandleAsync(CreateUserRequest request, CancellationToken cancellationToken)
     {
         try
@@ -34,6 +33,7 @@ public class CreateUserHandler
             var user = new UserModel
             {
                 Id = Guid.NewGuid(),
+                Role = request.Role,
                 Username = request.Username,
                 Password = request.Password
             };
@@ -44,10 +44,10 @@ public class CreateUserHandler
         }
         catch (Exception exception)
         {
-            const string errorText = "При создании пользователя возникла ошибка";
-            _logger.LogError(exception, errorText);
+            const string ErrorText = "При создании пользователя возникла ошибка";
+            _logger.LogError(exception, ErrorText);
 
-            return Result.Fail(errorText);
+            return Result.Fail(ErrorText);
         }
     }
 }

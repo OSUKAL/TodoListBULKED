@@ -1,5 +1,4 @@
-﻿using TodoListBULKED.App.Models;
-using TodoListBULKED.App.Models.User;
+﻿using TodoListBULKED.App.Models.User;
 
 namespace TodoListBULKED.App.Abstractions;
 
@@ -19,6 +18,6 @@ public interface IUserRepository
     /// Получение записи пользователя по имени
     /// </summary>
     /// <param name="username">Имя пользователя</param>
-    /// <param name="cancellationToken">Токен омтены операции</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
     Task<UserModel?> GetByUsernameAsync(string username, CancellationToken cancellationToken);
 }

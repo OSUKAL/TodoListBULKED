@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Models.Requests.Auth;
+using TodoLIstBULKED.Infrastructure.Cookie.Constants;
 
 namespace TodoListBULKED.App.Handlers.Auth;
 
@@ -52,10 +53,10 @@ public class LoginHandler
 
             var claims = new List<Claim>
             {
-                new("UserId", user.Id.ToString())
+                new(CookieClaims.UserId, user.Id.ToString())
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
             
@@ -63,14 +64,14 @@ public class LoginHandler
         }
         catch (Exception exception)
         {
-            const string errorText = "При авторизации возникла ошибка";
-            _logger.LogError(exception, errorText);
+            const string ErrorText = "При авторизации возникла ошибка";
+            _logger.LogError(exception, ErrorText);
 
-            return Result.Fail(errorText);
+            return Result.Fail(ErrorText);
         }
     }
 
-    private Result ValidateRequest(LoginRequest request)
+    private static Result ValidateRequest(LoginRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Username))
             return Result.Fail("Указано неверное имя пользователя");
@@ -81,7 +82,7 @@ public class LoginHandler
         return Result.Ok();
     }
 
-    private bool PasswordCheck(string loginPassword, string userPassword)
+    private static bool PasswordCheck(string loginPassword, string userPassword)
     {
         return loginPassword.Equals(userPassword);
     }

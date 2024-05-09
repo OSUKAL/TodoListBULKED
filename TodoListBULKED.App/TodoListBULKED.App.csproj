@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TodoLIstBULKED.Inrastructure\TodoLIstBULKED.Inrastructure.csproj" />
+      <ProjectReference Include="..\TodoLIstBULKED.Infrastructure\TodoLIstBULKED.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

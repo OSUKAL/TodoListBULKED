@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TodoListBULKED.App.Abstractions;
-using TodoListBULKED.App.Models;
 using TodoListBULKED.App.Models.User;
 using TodoListBULKED.Data.Context;
 using TodoListBULKED.Data.Models;
@@ -25,6 +24,7 @@ public class UserRepository : IUserRepository
             new UserTable
             {
                 Id = userModel.Id,
+                Role = userModel.Role,
                 Username = userModel.Username,
                 Password = userModel.Password
             });
@@ -43,6 +43,7 @@ public class UserRepository : IUserRepository
         return new UserModel
         {
             Id = databaseUser.Id,
+            Role = databaseUser.Role,
             Username = databaseUser.Username,
             Password = databaseUser.Password
         };

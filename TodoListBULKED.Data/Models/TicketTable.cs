@@ -1,4 +1,6 @@
-﻿namespace TodoListBULKED.Data.Models;
+﻿using TodoLIstBULKED.Infrastructure.Enums;
+
+namespace TodoListBULKED.Data.Models;
 
 /// <summary>
 /// Таблица задач
@@ -16,14 +18,19 @@ public class TicketTable
     public Guid UserId { get; init; }
     
     /// <summary>
+    /// Идентификатор создателя задачи
+    /// </summary>
+    public Guid CreatorId { get; init; }
+    
+    /// <summary>
     /// Состояние
     /// </summary>
-    public string State { get; init; }
+    public TicketState State { get; init; }
     
     /// <summary>
     /// Приоритет
     /// </summary>
-    public int Priority { get; init; }
+    public TicketPriority Priority { get; init; }
     
     /// <summary>
     /// Название

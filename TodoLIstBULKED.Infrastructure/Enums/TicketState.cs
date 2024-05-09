@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace TodoLIstBULKED.Inrastructure.Enums;
+﻿namespace TodoLIstBULKED.Infrastructure.Enums;
 
 /// <summary>
 /// Состояние задачи
@@ -13,12 +11,22 @@ public enum TicketState
     Unknown = 0,
     
     /// <summary>
-    /// Задача в работе
+    /// В работе
     /// </summary>
     InProgress = 1,
     
     /// <summary>
-    /// Задача выполнена
+    /// Выполнена
     /// </summary>
-    Done = 2
+    Done = 2,
+    
+    /// <summary>
+    /// В тестировании
+    /// </summary>
+    Testing = 3,
+    
+    /// <summary>
+    /// Ревью
+    /// </summary>
+    Review = 4
 }

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.App.Models.Requests.Ticket;
 
@@ -11,7 +12,13 @@ public class CreateTicketRequest
     /// Приоритет
     /// </summary>
     [JsonPropertyName("priority")]
-    public int Priority { get; init; }
+    public TicketPriority Priority { get; init; }
+    
+    /// <summary>
+    /// Идентификатор исполнителя
+    /// </summary>
+    [JsonPropertyName("userId")]
+    public Guid UserId { get; init; }
     
     /// <summary>
     /// Название
