@@ -8,6 +8,8 @@ namespace TodoListBULKED.API.Controllers;
 /// <summary>
 /// Контроллер для работы с пользователями
 /// </summary>
+[ApiController]
+[Route("api/user")]
 public class UserController : ControllerBase
 {
     private readonly CreateUserHandler _createUserHandler;
