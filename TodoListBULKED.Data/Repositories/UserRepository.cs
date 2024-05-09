@@ -3,6 +3,7 @@ using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Models.User;
 using TodoListBULKED.Data.Context;
 using TodoListBULKED.Data.Models;
+using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.Data.Repositories;
 
@@ -24,7 +25,7 @@ public class UserRepository : IUserRepository
             new UserTable
             {
                 Id = userModel.Id,
-                Role = userModel.Role,
+                Role = (int)userModel.Role,
                 Username = userModel.Username,
                 Password = userModel.Password
             });
@@ -43,7 +44,7 @@ public class UserRepository : IUserRepository
         return new UserModel
         {
             Id = databaseUser.Id,
-            Role = databaseUser.Role,
+            Role = (UserRole)databaseUser.Role,
             Username = databaseUser.Username,
             Password = databaseUser.Password
         };

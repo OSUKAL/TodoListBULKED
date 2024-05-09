@@ -12,7 +12,7 @@ using TodoListBULKED.Data.Context;
 namespace TodoListBULKED.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240430102438_Initial")]
+    [Migration("20240509164116_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -31,6 +31,9 @@ namespace TodoListBULKED.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -42,9 +45,8 @@ namespace TodoListBULKED.Data.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
 
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -57,18 +59,22 @@ namespace TodoListBULKED.Data.Migrations
             modelBuilder.Entity("TodoListBULKED.Data.Models.UserTable", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "Username");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });

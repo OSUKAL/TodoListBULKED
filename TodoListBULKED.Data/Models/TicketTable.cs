@@ -25,12 +25,12 @@ public class TicketTable
     /// <summary>
     /// Состояние
     /// </summary>
-    public TicketState State { get; init; }
+    public int State { get; init; }
     
     /// <summary>
     /// Приоритет
     /// </summary>
-    public TicketPriority Priority { get; init; }
+    public int Priority { get; init; }
     
     /// <summary>
     /// Название

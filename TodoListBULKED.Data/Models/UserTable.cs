@@ -18,7 +18,7 @@ public class UserTable
     /// <summary>
     /// Роль
     /// </summary>
-    public UserRole Role { get; init; }
+    public int Role { get; init; }
     
     /// <summary>
     /// Имя пользователя

@@ -28,6 +28,9 @@ namespace TodoListBULKED.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -39,9 +42,8 @@ namespace TodoListBULKED.Data.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
 
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -62,6 +64,9 @@ namespace TodoListBULKED.Data.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id", "Username");
 

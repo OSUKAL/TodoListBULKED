@@ -25,8 +25,8 @@ public class TicketRepository : ITicketRepository
                 Id = ticketModel.Id,
                 UserId = ticketModel.UserId,
                 CreatorId = ticketModel.CreatorId,
-                State = ticketModel.State,
-                Priority = ticketModel.Priority,
+                State = (int)ticketModel.State,
+                Priority = (int)ticketModel.Priority,
                 Name = ticketModel.Name,
                 Description = ticketModel.Description
             });
