@@ -13,20 +13,20 @@ public enum TicketPriority
     /// <summary>
     /// Наивысший
     /// </summary>
-    TopLevelPriority = 1,
+    Top = 1,
     
     /// <summary>
     /// Высокий
     /// </summary>
-    HighLevelPriority = 2,
+    High = 2,
     
     /// <summary>
     /// Средний
     /// </summary>
-    MidLevelPriority = 3,
+    Mid = 3,
     
     /// <summary>
     /// Низкий
     /// </summary>
-    LowLevelPriority = 4
+    Low = 4
 }

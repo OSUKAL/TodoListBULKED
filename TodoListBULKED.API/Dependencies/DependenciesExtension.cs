@@ -10,6 +10,7 @@ using TodoListBULKED.Data.Configuration;
 using TodoListBULKED.Data.Context;
 using TodoListBULKED.Data.Repositories;
 using TodoLIstBULKED.Infrastructure.Cookie;
+using TodoLIstBULKED.Infrastructure.Providers;
 
 namespace TodoListBULKED.API.Dependencies;
 
@@ -63,6 +64,9 @@ public static class DependenciesExtension
         services.AddControllers();
 
         return services
+            .AddMemoryCache()
+            .AddSingleton<TimeProvider, MainTimeProvider>()
+            .AddSingleton<EnumDescriptionProvider>()
             .AddScoped<ICookieGetter, CookieGetter>()
             .Configure<AppConfig>(configuration)
             .AddSwaggerGen();
@@ -81,7 +85,7 @@ public static class DependenciesExtension
                 Username = databaseConfig.Username,
                 Password = databaseConfig.Password
             };
-
+            
             options.UseNpgsql(connectionStringBuilder.ConnectionString);
         });
     }

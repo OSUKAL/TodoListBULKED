@@ -4,6 +4,7 @@ using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Models.Requests.Ticket;
 using TodoListBULKED.App.Models.Ticket;
 using TodoLIstBULKED.Infrastructure.Enums;
+using TodoLIstBULKED.Infrastructure.Providers;
 
 namespace TodoListBULKED.App.Handlers.Ticket;
 
@@ -14,12 +15,16 @@ public class CreateTicketHandler
 {
     private readonly ITicketRepository _ticketRepository;
     private readonly ILogger<CreateTicketHandler> _logger;
+    private readonly TimeProvider _timeProvider;
+    private readonly EnumDescriptionProvider _enumDescriptionProvider;
 
     /// <inheritdoc cref="CreateTicketHandler"/>
-    public CreateTicketHandler(ITicketRepository ticketRepository, ILogger<CreateTicketHandler> logger)
+    public CreateTicketHandler(ITicketRepository ticketRepository, ILogger<CreateTicketHandler> logger, TimeProvider timeProvider, EnumDescriptionProvider enumDescriptionProvider)
     {
         _ticketRepository = ticketRepository;
         _logger = logger;
+        _timeProvider = timeProvider;
+        _enumDescriptionProvider = enumDescriptionProvider;
     }
 
     /// <summary>
@@ -32,16 +37,21 @@ public class CreateTicketHandler
     {
         try
         {
-            var actualUserId = UserIdSetter(request.UserId, userId);
+            var dateNow = _timeProvider.GetUtcNow().UtcDateTime;
+            var performerId = GetPerformerId(request.PerformerId, userId);
+            var ticketNumber = GetTicketNumber(request.Type, dateNow);
             
             var ticket = new TicketModel
             {
                 Id = Guid.NewGuid(),
-                UserId = actualUserId,
+                Name = request.Name,
+                Number = ticketNumber,
+                Type = request.Type,
+                CreationDate = dateNow,
+                PerformerId = performerId,
                 CreatorId = userId,
                 State = TicketState.InProgress,
                 Priority = request.Priority,
-                Name = request.Name,
                 Description = request.Description
             };
 
@@ -58,11 +68,20 @@ public class CreateTicketHandler
         }
     }
 
-    private static Guid UserIdSetter(Guid requestUserId, Guid userId)
+    private static Guid GetPerformerId(Guid requestUserId, Guid userId)
     {
         if (requestUserId == Guid.Empty)
             return userId;
 
         return requestUserId;
+    }
+
+    private string GetTicketNumber(TicketType type, DateTime date)
+    {
+        var number = date.ToString("yyMMddHHmmss");
+        var description = _enumDescriptionProvider.GetDescription(type);
+        var result = $"{description}-{number}";
+
+        return result;
     }
 }

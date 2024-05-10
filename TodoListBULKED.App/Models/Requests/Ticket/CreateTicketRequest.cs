@@ -9,22 +9,28 @@ namespace TodoListBULKED.App.Models.Requests.Ticket;
 public class CreateTicketRequest
 {
     /// <summary>
-    /// Приоритет
-    /// </summary>
-    [JsonPropertyName("priority")]
-    public TicketPriority Priority { get; init; }
-    
-    /// <summary>
-    /// Идентификатор исполнителя
-    /// </summary>
-    [JsonPropertyName("userId")]
-    public Guid UserId { get; init; }
-    
-    /// <summary>
     /// Название
     /// </summary>
     [JsonPropertyName("name")]
     public string Name { get; init; }
+    
+    /// <summary>
+    /// Тип
+    /// </summary>
+    [JsonPropertyName("type")]
+    public TicketType Type { get; init; }
+    
+    /// <summary>
+    /// Идентификатор исполнителя
+    /// </summary>
+    [JsonPropertyName("performerId")]
+    public Guid PerformerId { get; init; }
+    
+    /// <summary>
+    /// Приоритет
+    /// </summary>
+    [JsonPropertyName("priority")]
+    public TicketPriority Priority { get; init; }
     
     /// <summary>
     /// Описание задачи

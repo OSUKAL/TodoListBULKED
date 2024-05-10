@@ -25,11 +25,14 @@ public class TicketRepository : ITicketRepository
             new TicketTable
             {
                 Id = ticketModel.Id,
-                UserId = ticketModel.UserId,
+                Name = ticketModel.Name,
+                Number = ticketModel.Number,
+                Type = (int)ticketModel.Type,
+                CreationDate = ticketModel.CreationDate,
+                PerformerId = ticketModel.PerformerId,
                 CreatorId = ticketModel.CreatorId,
                 State = (int)ticketModel.State,
                 Priority = (int)ticketModel.Priority,
-                Name = ticketModel.Name,
                 Description = ticketModel.Description
             });
 

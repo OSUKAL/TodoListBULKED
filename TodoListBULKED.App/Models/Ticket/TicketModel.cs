@@ -13,9 +13,29 @@ public class TicketModel
     public Guid Id { get; init; }
     
     /// <summary>
+    /// Название
+    /// </summary>
+    public string Name { get; init; }
+    
+    /// <summary>
+    /// Уникальный номер
+    /// </summary>
+    public string Number { get; init; }
+    
+    /// <summary>
+    /// Тип
+    /// </summary>
+    public TicketType Type { get; init; }
+
+    /// <summary>
+    /// Дата создания
+    /// </summary>
+    public DateTime CreationDate { get; init; }
+    
+    /// <summary>
     /// Идентификатор исполнителя
     /// </summary>
-    public Guid UserId { get; init; }
+    public Guid PerformerId { get; init; }
     
     /// <summary>
     /// Идентификатор создателя
@@ -33,14 +53,7 @@ public class TicketModel
     public TicketPriority Priority { get; init; }
     
     /// <summary>
-    /// Название
-    /// </summary>
-    public string Name { get; init; }
-    
-    /// <summary>
     /// Описание задачи
     /// </summary>
     public string Description { get; init; }
 }
-
-

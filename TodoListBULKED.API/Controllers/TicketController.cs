@@ -53,6 +53,9 @@ public class TicketController : ControllerBase
         if (request.Priority == TicketPriority.Unknown)
             return Result.Fail("Укажите приоритет задачи");
         
+        if (request.Type == TicketType.Unknown)
+            return Result.Fail("Укажите тип задачи");
+        
         if (string.IsNullOrWhiteSpace(request.Name))
             return Result.Fail("Укажите название задачи");
         
@@ -62,4 +65,3 @@ public class TicketController : ControllerBase
         return Result.Ok();
     }
 }
-
