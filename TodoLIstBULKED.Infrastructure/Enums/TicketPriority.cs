@@ -6,7 +6,7 @@
 public enum TicketPriority
 {
     /// <summary>
-    /// Неизвестный приоритет
+    /// Неизвестный
     /// </summary>
     Unknown = 0,
     

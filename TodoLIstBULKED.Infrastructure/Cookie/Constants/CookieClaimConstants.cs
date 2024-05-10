@@ -3,7 +3,7 @@
 /// <summary>
 /// Константы claim
 /// </summary>
-public static class CookieClaims
+public static class CookieClaimConstants
 {
     /// <summary>
     /// Идентификатор пользователя

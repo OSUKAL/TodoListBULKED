@@ -53,7 +53,7 @@ public class LoginHandler
 
             var claims = new List<Claim>
             {
-                new(CookieClaims.UserId, user.Id.ToString())
+                new(CookieClaimConstants.UserId, user.Id.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

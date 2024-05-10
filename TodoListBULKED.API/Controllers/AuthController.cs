@@ -56,7 +56,7 @@ public class AuthController : ControllerBase
         return Ok();
     }
     
-    private Result ValidateLoginRequest(LoginRequest request)
+    private static Result ValidateLoginRequest(LoginRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Username))
             return Result.Fail("Введите имя пользователя");

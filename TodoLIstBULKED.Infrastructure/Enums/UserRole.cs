@@ -6,7 +6,7 @@
 public enum UserRole
 {
     /// <summary>
-    /// Неизвестная роль
+    /// Неизвестная
     /// </summary>
     Unknown = 0,
     

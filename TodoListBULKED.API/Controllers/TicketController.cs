@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentResults;
+using Microsoft.AspNetCore.Mvc;
 using TodoListBULKED.App.Handlers.Ticket;
 using TodoListBULKED.App.Models.Requests.Ticket;
 using TodoLIstBULKED.Infrastructure.Cookie;
 using TodoLIstBULKED.Infrastructure.Cookie.Constants;
+using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.API.Controllers;
 
@@ -31,9 +33,11 @@ public class TicketController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> CreateAsync([FromBody] CreateTicketRequest request, CancellationToken cancellationToken)
     {
-        var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaims.UserId);
-
-        Console.WriteLine(userIdResult);
+        var validationResult = ValidateCreateTicketRequest(request);
+        if (validationResult.IsFailed)
+            return BadRequest(validationResult.Errors[0].ToString());
+        
+        var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
         
         var userId = Guid.Parse(userIdResult.Value);
 
@@ -43,4 +47,19 @@ public class TicketController : ControllerBase
 
         return Ok();
     }
+
+    private static Result ValidateCreateTicketRequest(CreateTicketRequest request)
+    {
+        if (request.Priority == TicketPriority.Unknown)
+            return Result.Fail("Укажите приоритет задачи");
+        
+        if (string.IsNullOrWhiteSpace(request.Name))
+            return Result.Fail("Укажите название задачи");
+        
+        if (string.IsNullOrWhiteSpace(request.Description))
+            return Result.Fail("Добавьте описание задачи");
+
+        return Result.Ok();
+    }
 }
+

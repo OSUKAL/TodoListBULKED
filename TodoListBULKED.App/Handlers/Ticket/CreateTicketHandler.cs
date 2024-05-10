@@ -32,10 +32,12 @@ public class CreateTicketHandler
     {
         try
         {
+            var actualUserId = UserIdSetter(request.UserId, userId);
+            
             var ticket = new TicketModel
             {
                 Id = Guid.NewGuid(),
-                UserId = request.UserId,
+                UserId = actualUserId,
                 CreatorId = userId,
                 State = TicketState.InProgress,
                 Priority = request.Priority,
@@ -54,5 +56,13 @@ public class CreateTicketHandler
 
             return Result.Fail(ErrorText);
         }
+    }
+
+    private static Guid UserIdSetter(Guid requestUserId, Guid userId)
+    {
+        if (requestUserId == Guid.Empty)
+            return userId;
+
+        return requestUserId;
     }
 }

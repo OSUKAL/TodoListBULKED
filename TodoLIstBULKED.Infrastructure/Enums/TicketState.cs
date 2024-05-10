@@ -6,7 +6,7 @@
 public enum TicketState
 {
     /// <summary>
-    /// Неизвестное состояние
+    /// Неизвестное
     /// </summary>
     Unknown = 0,
     

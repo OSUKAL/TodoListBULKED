@@ -19,6 +19,8 @@ public class TicketRepository : ITicketRepository
     /// <inheritdoc/>
     public async Task InsertAsync(TicketModel ticketModel, CancellationToken cancellationToken)
     {
+        //TODO ef core type cast
+        
         _appDbContext.Tickets.Add(
             new TicketTable
             {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TodoListBULKED.App.Handlers.User;
 using TodoListBULKED.App.Models.Requests.Auth;
+using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.API.Controllers;
 
@@ -43,6 +44,9 @@ public class UserController : ControllerBase
     {
         if (string.IsNullOrWhiteSpace(request.Username))
             return Result.Fail("Укажите имя пользователя");
+
+        if (request.Role == UserRole.Unknown)
+            return Result.Fail("Укажите роль пользователя");
         
         if (string.IsNullOrWhiteSpace(request.Password))
             return Result.Fail("Укажите пароль");
