@@ -17,17 +17,17 @@ namespace TodoListBULKED.App.Handlers.Auth;
 public class LoginHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IUserRepository _userRepository;
+    private readonly IAuthRepository _authRepository;
     private readonly ILogger<LoginHandler> _logger;
     private readonly IHasher _hasher;
 
     /// <inheritdoc cref="LoginHandler"/>
-    public LoginHandler(IUserRepository userRepository, ILogger<LoginHandler> logger, IHttpContextAccessor httpContextAccessor, IHasher hasher)
+    public LoginHandler(IAuthRepository authRepository, ILogger<LoginHandler> logger, IHttpContextAccessor httpContextAccessor, IHasher hasher)
     {
-        _userRepository = userRepository;
         _logger = logger;
         _httpContextAccessor = httpContextAccessor;
         _hasher = hasher;
+        _authRepository = authRepository;
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public class LoginHandler
             if (_httpContextAccessor.HttpContext == null)
                 return Result.Ok();
 
-            var user = await _userRepository.GetByUsernameAsync(request.Username, cancellationToken);
+            var user = await _authRepository.GetByUsernameAsync(request.Username, cancellationToken);
             if (user == null)
                 return Result.Fail("Пользователь с таким именем пользователя не найден");
 
@@ -56,7 +56,8 @@ public class LoginHandler
 
             var claims = new List<Claim>
             {
-                new(CookieClaimConstants.UserId, user.Id.ToString())
+                new(CookieClaimConstants.UserId, user.Id.ToString()),
+                new(CookieClaimConstants.UserRole, user.Role.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

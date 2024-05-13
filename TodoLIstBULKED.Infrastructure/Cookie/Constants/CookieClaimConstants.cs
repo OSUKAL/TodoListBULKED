@@ -9,4 +9,9 @@ public static class CookieClaimConstants
     /// Идентификатор пользователя
     /// </summary>
     public const string UserId = "UserId";
+
+    /// <summary>
+    /// Роль пользователя
+    /// </summary>
+    public const string UserRole = "UserRole";
 }

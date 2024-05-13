@@ -3,16 +3,11 @@
 namespace TodoListBULKED.App.Abstractions;
 
 /// <summary>
-/// Репозиторий для работы с таблицей пользователей
+/// Репозиторий аутентификации
 /// </summary>
-public interface IUserRepository
+public interface IAuthRepository
 {
-    /// <summary>
-    /// Создание записи пользователя
-    /// </summary>
-    /// <param name="userModel">Данные пользователя</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
-    Task InsertAsync(UserModel userModel, CancellationToken cancellationToken);
+    //TODO разобраться с репозиториями User/Auth
     
     /// <summary>
     /// Получение записи пользователя по имени пользователя
