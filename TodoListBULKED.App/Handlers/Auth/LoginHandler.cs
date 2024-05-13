@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Models.Requests.Auth;
 using TodoLIstBULKED.Infrastructure.Cookie.Constants;
+using TodoLIstBULKED.Infrastructure.Hashers;
 
 namespace TodoListBULKED.App.Handlers.Auth;
 
@@ -18,13 +19,15 @@ public class LoginHandler
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUserRepository _userRepository;
     private readonly ILogger<LoginHandler> _logger;
+    private readonly IHasher _hasher;
 
     /// <inheritdoc cref="LoginHandler"/>
-    public LoginHandler(IUserRepository userRepository, ILogger<LoginHandler> logger, IHttpContextAccessor httpContextAccessor)
+    public LoginHandler(IUserRepository userRepository, ILogger<LoginHandler> logger, IHttpContextAccessor httpContextAccessor, IHasher hasher)
     {
         _userRepository = userRepository;
         _logger = logger;
         _httpContextAccessor = httpContextAccessor;
+        _hasher = hasher;
     }
 
     /// <summary>
@@ -47,8 +50,8 @@ public class LoginHandler
             if (user == null)
                 return Result.Fail("Пользователь с таким именем пользователя не найден");
 
-            var passwordChecked = PasswordCheck(request.Password, user.Password);
-            if (!passwordChecked)
+            var isPasswordCorrect = _hasher.HashCompare(request.Password, user.PasswordHash);
+            if (!isPasswordCorrect)
                 return Result.Fail("Неверный пароль");
 
             var claims = new List<Claim>
@@ -80,10 +83,5 @@ public class LoginHandler
             return Result.Fail("Указан неверный пароль");
 
         return Result.Ok();
-    }
-
-    private static bool PasswordCheck(string loginPassword, string userPassword)
-    {
-        return loginPassword.Equals(userPassword);
     }
 }

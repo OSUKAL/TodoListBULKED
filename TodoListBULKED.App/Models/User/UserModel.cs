@@ -25,5 +25,5 @@ public class UserModel
     /// <summary>
     /// Пароль
     /// </summary>
-    public string Password { get; init; }
+    public string PasswordHash { get; init; }
 }

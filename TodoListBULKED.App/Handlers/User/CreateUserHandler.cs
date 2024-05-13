@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Models.Requests.Auth;
 using TodoListBULKED.App.Models.User;
+using TodoLIstBULKED.Infrastructure.Hashers;
 
 namespace TodoListBULKED.App.Handlers.User;
 
@@ -13,12 +14,14 @@ public class CreateUserHandler
 {
     private readonly IUserRepository _userRepository;
     private readonly ILogger<CreateUserHandler> _logger;
+    private readonly IHasher _hasher;
 
     /// <inheritdoc cref="CreateUserHandler"/> 
-    public CreateUserHandler(IUserRepository userRepository, ILogger<CreateUserHandler> logger)
+    public CreateUserHandler(IUserRepository userRepository, ILogger<CreateUserHandler> logger, IHasher hasher)
     {
         _userRepository = userRepository;
         _logger = logger;
+        _hasher = hasher;
     }
 
     /// <summary>
@@ -30,12 +33,18 @@ public class CreateUserHandler
     {
         try
         {
+            var validationResult = await ValidateCreateUserRequest(request, cancellationToken);
+            if (validationResult.IsFailed)
+                return validationResult;
+            
+            var hashedPassword = _hasher.Hash(request.Password);
+            
             var user = new UserModel
             {
                 Id = Guid.NewGuid(),
                 Role = request.Role,
                 Username = request.Username,
-                Password = request.Password
+                PasswordHash = hashedPassword
             };
 
             await _userRepository.InsertAsync(user, cancellationToken);
@@ -49,5 +58,16 @@ public class CreateUserHandler
 
             return Result.Fail(ErrorText);
         }
+    }
+
+    private async Task<Result> ValidateCreateUserRequest(CreateUserRequest request, CancellationToken cancellationToken)
+    {
+        //TODO дописать валидацию запроса на создание пользователя
+        
+        var user = await _userRepository.GetByUsernameAsync(request.Username, cancellationToken);
+        if (user != null)
+            return Result.Fail("Пользователь с таким именем уже существует");
+
+        return Result.Ok();
     }
 }

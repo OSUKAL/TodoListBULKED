@@ -27,7 +27,7 @@ public class UserRepository : IUserRepository
                 Id = userModel.Id,
                 Role = (int)userModel.Role,
                 Username = userModel.Username,
-                Password = userModel.Password
+                PasswordHash = userModel.PasswordHash
             });
 
         await _appDbContext.SaveChangesAsync(cancellationToken);
@@ -46,7 +46,7 @@ public class UserRepository : IUserRepository
             Id = databaseUser.Id,
             Role = (UserRole)databaseUser.Role,
             Username = databaseUser.Username,
-            Password = databaseUser.Password
+            PasswordHash = databaseUser.PasswordHash
         };
     }
 }

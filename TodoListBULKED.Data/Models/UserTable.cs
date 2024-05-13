@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.Data.Models;
 
@@ -28,5 +27,5 @@ public class UserTable
     /// <summary>
     /// Пароль
     /// </summary>
-    public string Password { get; init; }
+    public string PasswordHash { get; init; }
 }

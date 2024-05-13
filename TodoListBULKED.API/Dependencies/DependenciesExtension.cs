@@ -10,6 +10,7 @@ using TodoListBULKED.Data.Configuration;
 using TodoListBULKED.Data.Context;
 using TodoListBULKED.Data.Repositories;
 using TodoLIstBULKED.Infrastructure.Cookie;
+using TodoLIstBULKED.Infrastructure.Hashers;
 using TodoLIstBULKED.Infrastructure.Providers;
 
 namespace TodoListBULKED.API.Dependencies;
@@ -67,6 +68,7 @@ public static class DependenciesExtension
             .AddMemoryCache()
             .AddSingleton<TimeProvider, MainTimeProvider>()
             .AddSingleton<EnumDescriptionProvider>()
+            .AddScoped<IHasher, Hasher>()
             .AddScoped<ICookieGetter, CookieGetter>()
             .Configure<AppConfig>(configuration)
             .AddSwaggerGen();
