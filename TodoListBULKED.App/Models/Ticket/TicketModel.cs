@@ -33,14 +33,14 @@ public class TicketModel
     public DateTime CreationDate { get; init; }
     
     /// <summary>
-    /// Идентификатор исполнителя
-    /// </summary>
-    public Guid PerformerId { get; init; }
-    
-    /// <summary>
     /// Идентификатор создателя
     /// </summary>
-    public Guid CreatorId { get; init; }
+    public TicketUserModel Creator { get; init; }
+    
+    /// <summary>
+    /// Идентификатор исполнителя
+    /// </summary>
+    public TicketUserModel Performer { get; init; }
     
     /// <summary>
     /// Состояние

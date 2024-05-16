@@ -39,7 +39,7 @@ public class CreateTicketHandler
         {
             var dateNow = _timeProvider.GetUtcNow().UtcDateTime;
             var performerId = GetPerformerId(request.PerformerId, userId);
-            var ticketNumber = GetTicketNumber(request.Type, dateNow);
+            var ticketNumber = GetTicketNumber(dateNow);
             
             var ticket = new TicketModel
             {
@@ -48,8 +48,14 @@ public class CreateTicketHandler
                 Number = ticketNumber,
                 Type = request.Type,
                 CreationDate = dateNow,
-                PerformerId = performerId,
-                CreatorId = userId,
+                Performer = new TicketUserModel
+                {
+                    Id = performerId
+                },
+                Creator = new TicketUserModel
+                {
+                    Id = userId
+                },
                 State = TicketState.InProgress,
                 Priority = request.Priority,
                 Description = request.Description
@@ -76,12 +82,10 @@ public class CreateTicketHandler
         return requestUserId;
     }
 
-    private string GetTicketNumber(TicketType type, DateTime date)
+    private string GetTicketNumber(DateTime date)
     {
         var number = date.ToString("yyMMddHHmmss");
-        var description = _enumDescriptionProvider.GetDescription(type);
-        var result = $"{description}-{number}";
 
-        return result;
+        return number;
     }
 }

@@ -20,4 +20,11 @@ public interface IUserRepository
     /// <param name="username">Имя пользователя</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     Task<UserModel?> GetByUsernameAsync(string username, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получение записи пользователя по идентификатору
+    /// </summary>
+    /// <param name="userId">Имя пользователя</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    Task<UserModel?> GetByIdAsync(Guid userId, CancellationToken cancellationToken);
 }

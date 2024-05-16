@@ -31,14 +31,14 @@ public class TicketTable
     public DateTime CreationDate { get; init; }
 
     /// <summary>
-    /// Идентификатор пользователя
-    /// </summary>
-    public Guid PerformerId { get; init; }
-
-    /// <summary>
     /// Идентификатор создателя задачи
     /// </summary>
     public Guid CreatorId { get; init; }
+    
+    /// <summary>
+    /// Идентификатор пользователя
+    /// </summary>
+    public Guid PerformerId { get; init; }
 
     /// <summary>
     /// Состояние

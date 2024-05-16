@@ -16,13 +16,15 @@ namespace TodoListBULKED.API.Controllers;
 public class TicketController : ControllerBase
 {
     private readonly CreateTicketHandler _createTicketHandler;
+    private readonly GetTicketsHandler _getTicketsHandler;
     private readonly ICookieGetter _cookieGetter;
     
     /// <inheritdoc cref="TicketController"/>
-    public TicketController(CreateTicketHandler createTicketHandler, ICookieGetter cookieGetter)
+    public TicketController(CreateTicketHandler createTicketHandler, ICookieGetter cookieGetter, GetTicketsHandler getTicketsHandler)
     {
         _createTicketHandler = createTicketHandler;
         _cookieGetter = cookieGetter;
+        _getTicketsHandler = getTicketsHandler;
     }
 
     /// <summary>
@@ -46,6 +48,20 @@ public class TicketController : ControllerBase
             return BadRequest(result.Errors[0].ToString());
 
         return Ok();
+    }
+
+    /// <summary>
+    /// Получение всех задач
+    /// </summary>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    [HttpGet("get/all")]
+    public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
+    {
+        var result = await _getTicketsHandler.HandleAsync(cancellationToken);
+        if (result.IsFailed)
+            return BadRequest(result.Errors[0].ToString());
+        
+        return Ok(result.Value);
     }
 
     private static Result ValidateCreateTicketRequest(CreateTicketRequest request)

@@ -42,6 +42,7 @@ public static class DependenciesExtension
             });
         
         return services
+            .AddScoped<IAuthRepository, AuthRepository>()
             .AddScoped<LoginHandler>()
             .AddScoped<LogoutHandler>();
     }
@@ -57,7 +58,8 @@ public static class DependenciesExtension
     {
         return services
             .AddScoped<ITicketRepository, TicketRepository>()
-            .AddScoped<CreateTicketHandler>();
+            .AddScoped<CreateTicketHandler>()
+            .AddScoped<GetTicketsHandler>();
     }
 
     private static IServiceCollection AddBaseDependencies(this IServiceCollection services, IConfiguration configuration)

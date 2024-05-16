@@ -36,8 +36,22 @@ public class UserRepository : IUserRepository
     /// <inheritdoc/> 
     public async Task<UserModel?> GetByUsernameAsync(string username, CancellationToken cancellationToken)
     {
-        var databaseUser =  await _appDbContext.Users.SingleOrDefaultAsync(u => u.Username == username, cancellationToken);
-        
+        var databaseUser = await _appDbContext.Users.SingleOrDefaultAsync(u => u.Username == username, cancellationToken);
+        if (databaseUser == null)
+            return null;
+
+        return new UserModel
+        {
+            Id = databaseUser.Id,
+            Role = (UserRole)databaseUser.Role,
+            Username = databaseUser.Username,
+            PasswordHash = databaseUser.PasswordHash
+        };
+    }
+
+    public async Task<UserModel?> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var databaseUser = await _appDbContext.Users.SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
         if (databaseUser == null)
             return null;
 

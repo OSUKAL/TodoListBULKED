@@ -15,9 +15,8 @@ public interface ITicketRepository
     Task InsertAsync(TicketModel ticketModel, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Получение записи задачи по идентификатору пользователя
+    /// Получение всех записей задач
     /// </summary>
-    /// <param name="id">Идентификатор пользователя</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
-    Task<TicketModel?> GetByUserIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<IReadOnlyCollection<TicketModel>> GetAllAsync(CancellationToken cancellationToken);
 }
