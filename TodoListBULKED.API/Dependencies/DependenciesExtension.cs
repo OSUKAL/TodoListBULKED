@@ -59,7 +59,8 @@ public static class DependenciesExtension
         return services
             .AddScoped<ITicketRepository, TicketRepository>()
             .AddScoped<CreateTicketHandler>()
-            .AddScoped<GetTicketsHandler>();
+            .AddScoped<GetTicketsHandler>()
+            .AddScoped<GetPerformerTicketsHandler>();
     }
 
     private static IServiceCollection AddBaseDependencies(this IServiceCollection services, IConfiguration configuration)

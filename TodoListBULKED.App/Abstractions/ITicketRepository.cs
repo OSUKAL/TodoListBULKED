@@ -19,4 +19,11 @@ public interface ITicketRepository
     /// </summary>
     /// <param name="cancellationToken">Токен отмены операции</param>
     Task<IReadOnlyCollection<TicketModel>> GetAllAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получение записей задач исполнителя
+    /// </summary>
+    /// <param name="id">Идентификатор исполнителя</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    Task<IReadOnlyCollection<TicketModel>> GetByPerformerIdAsync(Guid id, CancellationToken cancellationToken);
 }

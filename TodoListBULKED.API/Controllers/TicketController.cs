@@ -16,15 +16,17 @@ namespace TodoListBULKED.API.Controllers;
 public class TicketController : ControllerBase
 {
     private readonly CreateTicketHandler _createTicketHandler;
-    private readonly GetTicketsHandler _getTicketsHandler;
     private readonly ICookieGetter _cookieGetter;
+    private readonly GetTicketsHandler _getTicketsHandler;
+    private readonly GetPerformerTicketsHandler _getPerformerTicketsHandler;
     
     /// <inheritdoc cref="TicketController"/>
-    public TicketController(CreateTicketHandler createTicketHandler, ICookieGetter cookieGetter, GetTicketsHandler getTicketsHandler)
+    public TicketController(CreateTicketHandler createTicketHandler, ICookieGetter cookieGetter, GetTicketsHandler getTicketsHandler, GetPerformerTicketsHandler getPerformerTicketsHandler)
     {
         _createTicketHandler = createTicketHandler;
         _cookieGetter = cookieGetter;
         _getTicketsHandler = getTicketsHandler;
+        _getPerformerTicketsHandler = getPerformerTicketsHandler;
     }
 
     /// <summary>
@@ -40,7 +42,6 @@ public class TicketController : ControllerBase
             return BadRequest(validationResult.Errors[0].ToString());
         
         var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
-        
         var userId = Guid.Parse(userIdResult.Value);
 
         var result = await _createTicketHandler.HandleAsync(request, userId, cancellationToken);
@@ -61,6 +62,23 @@ public class TicketController : ControllerBase
         if (result.IsFailed)
             return BadRequest(result.Errors[0].ToString());
         
+        return Ok(result.Value);
+    }
+
+    /// <summary>
+    /// Получение задач исполнителя
+    /// </summary>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    [HttpGet("get/performer")]
+    public async Task<IActionResult> GetPerformerTicketsAsync(CancellationToken cancellationToken)
+    {
+        var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
+        var userId = Guid.Parse(userIdResult.Value);
+
+        var result = await _getPerformerTicketsHandler.HandleAsync(userId, cancellationToken);
+        if (result.IsFailed)
+            return BadRequest(result.Errors[0].ToString());
+
         return Ok(result.Value);
     }
 
