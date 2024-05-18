@@ -4,7 +4,6 @@ using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Models.Requests.Ticket;
 using TodoListBULKED.App.Models.Ticket;
 using TodoLIstBULKED.Infrastructure.Enums;
-using TodoLIstBULKED.Infrastructure.Providers;
 
 namespace TodoListBULKED.App.Handlers.Ticket;
 
@@ -16,15 +15,13 @@ public class CreateTicketHandler
     private readonly ITicketRepository _ticketRepository;
     private readonly ILogger<CreateTicketHandler> _logger;
     private readonly TimeProvider _timeProvider;
-    private readonly EnumDescriptionProvider _enumDescriptionProvider;
 
     /// <inheritdoc cref="CreateTicketHandler"/>
-    public CreateTicketHandler(ITicketRepository ticketRepository, ILogger<CreateTicketHandler> logger, TimeProvider timeProvider, EnumDescriptionProvider enumDescriptionProvider)
+    public CreateTicketHandler(ITicketRepository ticketRepository, ILogger<CreateTicketHandler> logger, TimeProvider timeProvider)
     {
         _ticketRepository = ticketRepository;
         _logger = logger;
         _timeProvider = timeProvider;
-        _enumDescriptionProvider = enumDescriptionProvider;
     }
 
     /// <summary>

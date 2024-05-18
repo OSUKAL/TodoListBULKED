@@ -19,28 +19,28 @@ public class TicketRepository : ITicketRepository
     }
 
     /// <inheritdoc/>
-    public async Task InsertAsync(TicketModel ticketModel, CancellationToken cancellationToken)
+    public async Task InsertAsync(TicketModel ticket, CancellationToken cancellationToken)
     {
         //TODO ef core type cast
         
         _appDbContext.Tickets.Add(
             new TicketTable
             {
-                Id = ticketModel.Id,
-                Name = ticketModel.Name,
-                Number = ticketModel.Number,
-                Type = (int)ticketModel.Type,
-                CreationDate = ticketModel.CreationDate,
-                CreatorId = ticketModel.Creator.Id,
-                PerformerId = ticketModel.Performer.Id,
-                State = (int)ticketModel.State,
-                Priority = (int)ticketModel.Priority,
-                Description = ticketModel.Description
+                Id = ticket.Id,
+                Name = ticket.Name,
+                Number = ticket.Number,
+                Type = (int)ticket.Type,
+                CreationDate = ticket.CreationDate,
+                CreatorId = ticket.Creator.Id,
+                PerformerId = ticket.Performer.Id,
+                State = (int)ticket.State,
+                Priority = (int)ticket.Priority,
+                Description = ticket.Description
             });
 
         await _appDbContext.SaveChangesAsync(cancellationToken);
     }
-
+    
     /// <inheritdoc/>
     public async Task<IReadOnlyCollection<TicketModel>> GetAllAsync(CancellationToken cancellationToken)
     {
@@ -64,7 +64,23 @@ public class TicketRepository : ITicketRepository
         
         return tickets;
     }
-    
+
+    /// <inheritdoc/>
+    public async Task UpdateAsync(TicketEditModel ticketEdit, CancellationToken cancellationToken)
+    {
+        await _appDbContext.Tickets
+            .Where(t => t.Id == ticketEdit.Id)
+            .ExecuteUpdateAsync(c => c
+                .SetProperty(t => t.Name, ticketEdit.Name)
+                .SetProperty(t => t.Type, (int)ticketEdit.Type)
+                .SetProperty(t => t.PerformerId, ticketEdit.Performer.Id)
+                .SetProperty(t => t.State, (int)ticketEdit.State)
+                .SetProperty(t => t.Priority, (int)ticketEdit.Priority)
+                .SetProperty(t => t.Description, ticketEdit.Description),
+                cancellationToken
+            );
+    }
+
     private IQueryable<TicketModel> JoinUsers(IQueryable<TicketTable> tickets)
     {
         return tickets

@@ -6,6 +6,7 @@ using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Handlers.Auth;
 using TodoListBULKED.App.Handlers.Ticket;
 using TodoListBULKED.App.Handlers.User;
+using TodoListBULKED.App.Utilities;
 using TodoListBULKED.Data.Configuration;
 using TodoListBULKED.Data.Context;
 using TodoListBULKED.Data.Repositories;
@@ -59,8 +60,10 @@ public static class DependenciesExtension
         return services
             .AddScoped<ITicketRepository, TicketRepository>()
             .AddScoped<CreateTicketHandler>()
+            .AddScoped<TicketNumberUtility>()
             .AddScoped<GetTicketsHandler>()
-            .AddScoped<GetPerformerTicketsHandler>();
+            .AddScoped<GetPerformerTicketsHandler>()
+            .AddScoped<EditTicketHandler>();
     }
 
     private static IServiceCollection AddBaseDependencies(this IServiceCollection services, IConfiguration configuration)

@@ -19,14 +19,20 @@ public class TicketController : ControllerBase
     private readonly ICookieGetter _cookieGetter;
     private readonly GetTicketsHandler _getTicketsHandler;
     private readonly GetPerformerTicketsHandler _getPerformerTicketsHandler;
+    private readonly EditTicketHandler _editTicketHandler;
     
     /// <inheritdoc cref="TicketController"/>
-    public TicketController(CreateTicketHandler createTicketHandler, ICookieGetter cookieGetter, GetTicketsHandler getTicketsHandler, GetPerformerTicketsHandler getPerformerTicketsHandler)
+    public TicketController(CreateTicketHandler createTicketHandler,
+        ICookieGetter cookieGetter,
+        GetTicketsHandler getTicketsHandler,
+        GetPerformerTicketsHandler getPerformerTicketsHandler,
+        EditTicketHandler editTicketHandler)
     {
         _createTicketHandler = createTicketHandler;
         _cookieGetter = cookieGetter;
         _getTicketsHandler = getTicketsHandler;
         _getPerformerTicketsHandler = getPerformerTicketsHandler;
+        _editTicketHandler = editTicketHandler;
     }
 
     /// <summary>
@@ -82,6 +88,21 @@ public class TicketController : ControllerBase
         return Ok(result.Value);
     }
 
+    /// <summary>
+    /// Редактирование задачи
+    /// </summary>
+    /// <param name="request">Запрос на редактирование задачи</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    [HttpPost("edit")]
+    public async Task<IActionResult> EditTicketAsync([FromBody] EditTicketRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _editTicketHandler.HandleAsync(request, cancellationToken);
+        if (result.IsFailed)
+            return BadRequest(result.Errors[0].ToString());
+        
+        return Ok();
+    }
+
     private static Result ValidateCreateTicketRequest(CreateTicketRequest request)
     {
         if (request.Priority == TicketPriority.Unknown)
@@ -99,3 +120,16 @@ public class TicketController : ControllerBase
         return Result.Ok();
     }
 }
+
+// public static class TestClass
+// {
+//     public static string ResultErrorString(Result obj)
+//     {
+//         return obj.Errors[0].ToString();
+//     }
+//     
+//     public static string ResultTErrorString(Result<GetTicketsResponse> obj)
+//     {
+//         return obj.Errors[0].ToString();
+//     }
+// }
