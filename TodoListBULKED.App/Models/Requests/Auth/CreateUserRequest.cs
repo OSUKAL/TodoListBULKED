@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.App.Models.Requests.Auth;
@@ -18,6 +19,7 @@ public class CreateUserRequest
     /// Роль
     /// </summary>
     [JsonPropertyName("role")]
+    [EnumDataType(typeof(UserRole))]
     public UserRole Role { get; init; }
     
     /// <summary>

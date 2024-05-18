@@ -2,8 +2,7 @@
 using Microsoft.Extensions.Logging;
 using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Models.Responses.Ticket;
-using TodoLIstBULKED.Infrastructure.Enums;
-using TodoLIstBULKED.Infrastructure.Providers;
+using TodoListBULKED.App.Utilities;
 
 namespace TodoListBULKED.App.Handlers.Ticket;
 
@@ -14,14 +13,14 @@ public class GetTicketsHandler
 {
     private readonly ITicketRepository _ticketRepository;
     private readonly ILogger<GetTicketsHandler> _logger;
-    private readonly EnumDescriptionProvider _enumDescriptionProvider;
-    
+    private readonly TicketNumberUtility _ticketNumberUtility;
+
     /// <inheritdoc cref="GetTicketsHandler"/>
-    public GetTicketsHandler(ITicketRepository ticketRepository, ILogger<GetTicketsHandler> logger, EnumDescriptionProvider enumDescriptionProvider)
+    public GetTicketsHandler(ITicketRepository ticketRepository, ILogger<GetTicketsHandler> logger, TicketNumberUtility ticketNumberUtility)
     {
         _ticketRepository = ticketRepository;
         _logger = logger;
-        _enumDescriptionProvider = enumDescriptionProvider;
+        _ticketNumberUtility = ticketNumberUtility;
     }
 
     /// <summary>
@@ -38,7 +37,7 @@ public class GetTicketsHandler
                 .Select(t => new TicketDto(
                     t.Id,
                     t.Name,
-                    GetPrefixedTicketNumber(t.Type, t.Number),
+                    _ticketNumberUtility.AddTypePrefix(t.Type, t.Number),
                     t.Type,
                     t.CreationDate,
                     new TicketUserDto(t.Creator.Id, t.Creator.Name ?? string.Empty),
@@ -58,13 +57,5 @@ public class GetTicketsHandler
 
             return Result.Fail(ErrorText);
         }
-    }
-
-    private string GetPrefixedTicketNumber(TicketType type, string number)
-    {
-        var description = _enumDescriptionProvider.GetDescription(type);
-        var result = $"{description}-{number}";
-
-        return result;
     }
 }

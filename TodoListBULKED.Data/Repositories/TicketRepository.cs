@@ -42,52 +42,32 @@ public class TicketRepository : ITicketRepository
     }
 
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<TicketModel>> GetAllAsync( CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<TicketModel>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var tickets = await _appDbContext.Tickets
-            .Join(
-                _appDbContext.Users,
-                t => t.PerformerId,
-                u => u.Id,
-                (t, u) => new
-                {
-                    Ticket = t,
-                    Performer = u
-                })
-            .Join(_appDbContext.Users,
-                a => a.Ticket.CreatorId,
-                u => u.Id,
-                (a, u) => new TicketModel
-                {
-                    Id = a.Ticket.Id,
-                    Name = a.Ticket.Name,
-                    Number = a.Ticket.Number,
-                    Type = (TicketType)a.Ticket.Type,
-                    CreationDate = a.Ticket.CreationDate,
-                    Creator = new TicketUserModel
-                    {
-                        Id = u.Id,
-                        Name = u.Username
-                    },
-                    Performer = new TicketUserModel
-                    {
-                        Id = a.Performer.Id,
-                        Name = a.Performer.Username
-                    },
-                    State = (TicketState)a.Ticket.State,
-                    Priority = (TicketPriority)a.Ticket.Priority,
-                    Description = a.Ticket.Description
-                })
-            .ToArrayAsync(cancellationToken);
+        var ticketsWithoutUsers = _appDbContext.Tickets;
 
+        var tickets = await JoinUsers(ticketsWithoutUsers)
+            .ToArrayAsync(cancellationToken);
+        
         return tickets;
     }
 
     /// <inheritdoc/>
     public async Task<IReadOnlyCollection<TicketModel>> GetByPerformerIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var tickets = await _appDbContext.Tickets
-            .Where(t => t.PerformerId == id)
+        var ticketsWithoutUsers = _appDbContext.Tickets
+            .Where(t => t.PerformerId == id);
+            
+
+        var tickets = await JoinUsers(ticketsWithoutUsers)
+            .ToArrayAsync(cancellationToken);
+        
+        return tickets;
+    }
+    
+    private IQueryable<TicketModel> JoinUsers(IQueryable<TicketTable> tickets)
+    {
+        return tickets
             .Join(_appDbContext.Users,
                 t => t.PerformerId,
                 u => u.Id,
@@ -119,9 +99,6 @@ public class TicketRepository : ITicketRepository
                     State = (TicketState)a.Ticket.State,
                     Priority = (TicketPriority)a.Ticket.Priority,
                     Description = a.Ticket.Description
-                })
-            .ToArrayAsync(cancellationToken);
-
-        return tickets;
+                });
     }
 }

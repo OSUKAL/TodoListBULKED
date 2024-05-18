@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.App.Models.Requests.Ticket;
@@ -18,6 +19,7 @@ public class CreateTicketRequest
     /// Тип
     /// </summary>
     [JsonPropertyName("type")]
+    [EnumDataType(typeof(TicketType))]
     public TicketType Type { get; init; }
     
     /// <summary>
@@ -30,6 +32,7 @@ public class CreateTicketRequest
     /// Приоритет
     /// </summary>
     [JsonPropertyName("priority")]
+    [EnumDataType(typeof(TicketPriority))]
     public TicketPriority Priority { get; init; }
     
     /// <summary>
