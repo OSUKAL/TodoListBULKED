@@ -63,6 +63,7 @@ public static class DependenciesExtension
             .AddScoped<TicketNumberUtility>()
             .AddScoped<GetTicketsHandler>()
             .AddScoped<GetPerformerTicketsHandler>()
+            .AddScoped<GetCreatorTicketsHandler>()
             .AddScoped<EditTicketHandler>();
     }
 

@@ -28,6 +28,13 @@ public interface ITicketRepository
     Task<IReadOnlyCollection<TicketModel>> GetByPerformerIdAsync(Guid id, CancellationToken cancellationToken);
     
     /// <summary>
+    /// Получение записей задач создателя
+    /// </summary>
+    /// <param name="id">Идентификатор создателя</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    Task<IReadOnlyCollection<TicketModel>> GetByCreatorIdAsync(Guid id, CancellationToken cancellationToken);
+    
+    /// <summary>
     /// Изменение записи задачи
     /// </summary>
     /// <param name="ticketEdit">Данные задачи</param>

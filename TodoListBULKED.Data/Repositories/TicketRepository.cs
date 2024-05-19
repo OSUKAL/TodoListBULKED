@@ -66,6 +66,18 @@ public class TicketRepository : ITicketRepository
     }
 
     /// <inheritdoc/>
+    public async Task<IReadOnlyCollection<TicketModel>> GetByCreatorIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var ticketsWithoutUsers = _appDbContext.Tickets
+            .Where(t => t.CreatorId == id);
+
+        var tickets = await JoinUsers(ticketsWithoutUsers)
+            .ToArrayAsync(cancellationToken);
+
+        return tickets;
+    }
+    
+    /// <inheritdoc/>
     public async Task UpdateAsync(TicketEditModel editedTicket, CancellationToken cancellationToken)
     {
         var ticket = await _appDbContext.Tickets

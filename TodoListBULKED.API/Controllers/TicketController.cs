@@ -20,6 +20,7 @@ public class TicketController : ControllerBase
     private readonly ICookieGetter _cookieGetter;
     private readonly GetTicketsHandler _getTicketsHandler;
     private readonly GetPerformerTicketsHandler _getPerformerTicketsHandler;
+    private readonly GetCreatorTicketsHandler _getCreatorTicketsHandler;
     private readonly EditTicketHandler _editTicketHandler;
     
     /// <inheritdoc cref="TicketController"/>
@@ -27,12 +28,15 @@ public class TicketController : ControllerBase
         ICookieGetter cookieGetter,
         GetTicketsHandler getTicketsHandler,
         GetPerformerTicketsHandler getPerformerTicketsHandler,
-        EditTicketHandler editTicketHandler)
+        GetCreatorTicketsHandler getCreatorTicketsHandler,
+        EditTicketHandler editTicketHandler
+        )
     {
         _createTicketHandler = createTicketHandler;
         _cookieGetter = cookieGetter;
         _getTicketsHandler = getTicketsHandler;
         _getPerformerTicketsHandler = getPerformerTicketsHandler;
+        _getCreatorTicketsHandler = getCreatorTicketsHandler;
         _editTicketHandler = editTicketHandler;
     }
 
@@ -86,6 +90,21 @@ public class TicketController : ControllerBase
         if (result.IsFailed)
             return BadRequest(result.ErrorSummary());
 
+        return Ok(result.Value);
+    }
+
+    /// <summary>
+    /// Получение задач создателя
+    /// </summary>
+    /// <param name="id">Идентификатор создателя</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    [HttpGet("get/creator")]
+    public async Task<IActionResult> GetCreatorTicketsAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _getCreatorTicketsHandler.HandleAsync(id, cancellationToken);
+        if (result.IsFailed)
+            return BadRequest(result.ErrorSummary());
+        
         return Ok(result.Value);
     }
 
