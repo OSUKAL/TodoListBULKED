@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TodoListBULKED.App.Handlers.User;
 using TodoListBULKED.App.Models.Requests.Auth;
 using TodoLIstBULKED.Infrastructure.Enums;
+using TodoLIstBULKED.Infrastructure.Extensions;
 
 namespace TodoListBULKED.API.Controllers;
 
@@ -31,11 +32,11 @@ public class UserController : ControllerBase
     {
         var validationResult = ValidateCreateUserRequest(request);
         if (validationResult.IsFailed)
-            return BadRequest(validationResult.Errors[0].ToString());
+            return BadRequest(validationResult.ErrorSummary());
 
         var result = await _createUserHandler.HandleAsync(request, cancellationToken);
         if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
+            return BadRequest(result.ErrorSummary());
 
         return Ok();
     }

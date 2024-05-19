@@ -5,6 +5,7 @@ using TodoListBULKED.App.Models.Requests.Ticket;
 using TodoLIstBULKED.Infrastructure.Cookie;
 using TodoLIstBULKED.Infrastructure.Cookie.Constants;
 using TodoLIstBULKED.Infrastructure.Enums;
+using TodoLIstBULKED.Infrastructure.Extensions;
 
 namespace TodoListBULKED.API.Controllers;
 
@@ -45,14 +46,14 @@ public class TicketController : ControllerBase
     {
         var validationResult = ValidateCreateTicketRequest(request);
         if (validationResult.IsFailed)
-            return BadRequest(validationResult.Errors[0].ToString());
+            return BadRequest(validationResult.ErrorSummary());
         
         var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
         var userId = Guid.Parse(userIdResult.Value);
 
         var result = await _createTicketHandler.HandleAsync(request, userId, cancellationToken);
         if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
+            return BadRequest(result.ErrorSummary());
 
         return Ok();
     }
@@ -66,7 +67,7 @@ public class TicketController : ControllerBase
     {
         var result = await _getTicketsHandler.HandleAsync(cancellationToken);
         if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
+            return BadRequest(result.ErrorSummary());
         
         return Ok(result.Value);
     }
@@ -83,7 +84,7 @@ public class TicketController : ControllerBase
 
         var result = await _getPerformerTicketsHandler.HandleAsync(userId, cancellationToken);
         if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
+            return BadRequest(result.ErrorSummary());
 
         return Ok(result.Value);
     }
@@ -96,9 +97,13 @@ public class TicketController : ControllerBase
     [HttpPost("edit")]
     public async Task<IActionResult> EditTicketAsync([FromBody] EditTicketRequest request, CancellationToken cancellationToken)
     {
+        var validationResult = ValidateEditTicketRequest(request);
+        if (validationResult.IsFailed)
+            return BadRequest(validationResult.ErrorSummary());
+        
         var result = await _editTicketHandler.HandleAsync(request, cancellationToken);
         if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
+            return BadRequest(result.ErrorSummary());
         
         return Ok();
     }
@@ -119,17 +124,30 @@ public class TicketController : ControllerBase
 
         return Result.Ok();
     }
-}
 
-// public static class TestClass
-// {
-//     public static string ResultErrorString(Result obj)
-//     {
-//         return obj.Errors[0].ToString();
-//     }
-//     
-//     public static string ResultTErrorString(Result<GetTicketsResponse> obj)
-//     {
-//         return obj.Errors[0].ToString();
-//     }
-// }
+    private static Result ValidateEditTicketRequest(EditTicketRequest request)
+    {
+        if (request.Id == Guid.Empty)
+            return Result.Fail("Задача не существует");
+
+        if (string.IsNullOrWhiteSpace(request.Name))
+            return Result.Fail("Укажите название задачи");
+
+        if (request.Type == TicketType.Unknown)
+            return Result.Fail("Укажите тип задачи");
+
+        if (request.PerformerId == Guid.Empty)
+            return Result.Fail("Укажите исполнителя задачи");
+        
+        if (request.State == TicketState.Unknown)
+            return Result.Fail("Укажите состояние задачи");
+        
+        if(request.Priority == TicketPriority.Unknown)
+            return Result.Fail("Укажите приоритет задачи");
+
+        if (string.IsNullOrWhiteSpace(request.Description))
+            return Result.Fail("Добавьте описание задачи");
+        
+        return Result.Ok();
+    }
+}

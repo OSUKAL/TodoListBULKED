@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TodoListBULKED.App.Handlers.Auth;
 using TodoListBULKED.App.Models.Requests.Auth;
+using TodoLIstBULKED.Infrastructure.Extensions;
 
 namespace TodoListBULKED.API.Controllers;
 
@@ -33,11 +34,11 @@ public class AuthController : ControllerBase
     {
         var validationResult = ValidateLoginRequest(request);
         if (validationResult.IsFailed)
-            return BadRequest(validationResult.Errors[0].ToString());
+            return BadRequest(validationResult.ErrorSummary());
             
         var result = await _loginHandler.HandleAsync(request, cancellationToken);
         if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
+            return BadRequest(result.ErrorSummary());
 
         return Ok();
     }
@@ -51,7 +52,7 @@ public class AuthController : ControllerBase
     {
         var result = await _logoutHandler.HandleAsync();
         if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
+            return BadRequest(result.ErrorSummary());
 
         return Ok();
     }
