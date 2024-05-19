@@ -35,10 +35,7 @@ public class EditTicketHandler
                 Id = request.Id,
                 Name = request.Name,
                 Type = request.Type,
-                Performer = new TicketUserModel
-                {
-                    Id = request.Performer.Id
-                },
+                PerformerId = request.PerformerId,
                 State = request.State,
                 Priority = request.Priority,
                 Description = request.Description

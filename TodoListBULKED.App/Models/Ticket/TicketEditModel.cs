@@ -23,9 +23,9 @@ public class TicketEditModel
     public TicketType Type { get; init; }
     
     /// <summary>
-    /// Данные исполнителя
+    /// Идентификатор исполнителя
     /// </summary>
-    public TicketUserModel Performer { get; init; }
+    public Guid PerformerId { get; init; }
     
     /// <summary>
     /// Состояние

@@ -66,19 +66,21 @@ public class TicketRepository : ITicketRepository
     }
 
     /// <inheritdoc/>
-    public async Task UpdateAsync(TicketEditModel ticketEdit, CancellationToken cancellationToken)
+    public async Task UpdateAsync(TicketEditModel editedTicket, CancellationToken cancellationToken)
     {
-        await _appDbContext.Tickets
-            .Where(t => t.Id == ticketEdit.Id)
-            .ExecuteUpdateAsync(c => c
-                .SetProperty(t => t.Name, ticketEdit.Name)
-                .SetProperty(t => t.Type, (int)ticketEdit.Type)
-                .SetProperty(t => t.PerformerId, ticketEdit.Performer.Id)
-                .SetProperty(t => t.State, (int)ticketEdit.State)
-                .SetProperty(t => t.Priority, (int)ticketEdit.Priority)
-                .SetProperty(t => t.Description, ticketEdit.Description),
-                cancellationToken
-            );
+        var ticket = await _appDbContext.Tickets
+            .SingleOrDefaultAsync(t => t.Id == editedTicket.Id, cancellationToken);
+        if(ticket == null)
+            return;
+
+        ticket.Name = editedTicket.Name;
+        ticket.Type = (int)editedTicket.Type;
+        ticket.PerformerId = editedTicket.PerformerId;
+        ticket.State = (int)editedTicket.State;
+        ticket.Priority = (int)editedTicket.Priority;
+        ticket.Description = editedTicket.Description;
+
+        await _appDbContext.SaveChangesAsync(cancellationToken);
     }
 
     private IQueryable<TicketModel> JoinUsers(IQueryable<TicketTable> tickets)

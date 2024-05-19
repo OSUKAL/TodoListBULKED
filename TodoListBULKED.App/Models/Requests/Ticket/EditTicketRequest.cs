@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using TodoListBULKED.App.Models.Ticket;
 using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.App.Models.Requests.Ticket;
@@ -32,8 +31,8 @@ public class EditTicketRequest
     /// <summary>
     /// Идентификатор исполнителя
     /// </summary>
-    [JsonPropertyName("performer")]
-    public TicketUserModel Performer { get; init; }
+    [JsonPropertyName("performerId")]
+    public Guid PerformerId { get; init; }
     
     /// <summary>
     /// Состояние

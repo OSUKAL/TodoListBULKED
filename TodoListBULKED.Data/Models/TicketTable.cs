@@ -13,7 +13,7 @@ public class TicketTable
     /// <summary>
     /// Название
     /// </summary>
-    public string Name { get; init; }
+    public string Name { get; internal set; }
 
     /// <summary>
     /// Уникальный номер
@@ -23,7 +23,7 @@ public class TicketTable
     /// <summary>
     /// Тип
     /// </summary>
-    public int Type { get; init; }
+    public int Type { get; internal set; }
 
     /// <summary>
     /// Дата создания
@@ -38,20 +38,20 @@ public class TicketTable
     /// <summary>
     /// Идентификатор пользователя
     /// </summary>
-    public Guid PerformerId { get; init; }
+    public Guid PerformerId { get; internal set; }
 
     /// <summary>
     /// Состояние
     /// </summary>
-    public int State { get; init; }
+    public int State { get; internal set; }
 
     /// <summary>
     /// Приоритет
     /// </summary>
-    public int Priority { get; init; }
+    public int Priority { get; internal set; }
 
     /// <summary>
     /// Описание задачи
     /// </summary>
-    public string Description { get; init; }
+    public string Description { get; internal set; }
 }
