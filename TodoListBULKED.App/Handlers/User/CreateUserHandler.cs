@@ -1,6 +1,7 @@
 ﻿using FluentResults;
 using Microsoft.Extensions.Logging;
 using TodoListBULKED.App.Abstractions;
+using TodoListBULKED.App.Handlers.User.Validators;
 using TodoListBULKED.App.Models.Requests.Auth;
 using TodoListBULKED.App.Models.User;
 using TodoLIstBULKED.Infrastructure.Hashers;
@@ -15,13 +16,15 @@ public class CreateUserHandler
     private readonly IUserRepository _userRepository;
     private readonly ILogger<CreateUserHandler> _logger;
     private readonly IHasher _hasher;
+    private readonly CreateUserValidator _createUserValidator;
 
     /// <inheritdoc cref="CreateUserHandler"/> 
-    public CreateUserHandler(IUserRepository userRepository, ILogger<CreateUserHandler> logger, IHasher hasher)
+    public CreateUserHandler(IUserRepository userRepository, ILogger<CreateUserHandler> logger, IHasher hasher, CreateUserValidator createUserValidator)
     {
         _userRepository = userRepository;
         _logger = logger;
         _hasher = hasher;
+        _createUserValidator = createUserValidator;
     }
 
     /// <summary>
@@ -33,7 +36,7 @@ public class CreateUserHandler
     {
         try
         {
-            var validationResult = await ValidateCreateUserRequest(request, cancellationToken);
+            var validationResult = await _createUserValidator.ValidateAsync(request, cancellationToken);
             if (validationResult.IsFailed)
                 return validationResult;
             
@@ -58,16 +61,5 @@ public class CreateUserHandler
 
             return Result.Fail(ErrorText);
         }
-    }
-
-    private async Task<Result> ValidateCreateUserRequest(CreateUserRequest request, CancellationToken cancellationToken)
-    {
-        //TODO дописать валидацию запроса на создание пользователя
-        
-        var user = await _userRepository.GetByUsernameAsync(request.Username, cancellationToken);
-        if (user != null)
-            return Result.Fail("Пользователь с таким именем уже существует");
-
-        return Result.Ok();
     }
 }

@@ -6,6 +6,7 @@ using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Handlers.Auth;
 using TodoListBULKED.App.Handlers.Ticket;
 using TodoListBULKED.App.Handlers.User;
+using TodoListBULKED.App.Handlers.User.Validators;
 using TodoListBULKED.App.Utilities;
 using TodoListBULKED.Data.Configuration;
 using TodoListBULKED.Data.Context;
@@ -52,7 +53,8 @@ public static class DependenciesExtension
     {
         return services
             .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped<CreateUserHandler>();
+            .AddScoped<CreateUserHandler>()
+            .AddScoped<CreateUserValidator>();
     }
 
     private static IServiceCollection AddTicketDependencies(this IServiceCollection services)
