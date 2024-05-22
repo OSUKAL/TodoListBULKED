@@ -2,18 +2,18 @@
 using System.Text.Json.Serialization;
 using TodoLIstBULKED.Infrastructure.Enums;
 
-namespace TodoListBULKED.App.Models.Requests.Auth;
+namespace TodoListBULKED.App.Models.Requests.User;
 
 /// <summary>
-/// Запрос на создание пользователя
+/// Запрос на изменение данных пользователя
 /// </summary>
-public class CreateUserRequest
+public class EditUserRequest
 {
     /// <summary>
-    /// Имя пользователя
+    /// Идентификатор
     /// </summary>
-    [JsonPropertyName("username")]
-    public string Username { get; init; }
+    [JsonPropertyName("id")]
+    public Guid Id { get; init; }
     
     /// <summary>
     /// Роль
@@ -23,8 +23,8 @@ public class CreateUserRequest
     public UserRole Role { get; init; }
     
     /// <summary>
-    /// Пароль
+    /// Имя пользователя
     /// </summary>
-    [JsonPropertyName("password")]
-    public string Password { get; init; }
+    [JsonPropertyName("username")]
+    public string Username { get; init; }
 }

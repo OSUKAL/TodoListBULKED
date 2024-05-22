@@ -40,7 +40,36 @@ public class TicketRepository : ITicketRepository
 
         await _appDbContext.SaveChangesAsync(cancellationToken);
     }
-    
+
+    /// <inheritdoc/>
+    public async Task<TicketModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var databaseTicket = await _appDbContext.Tickets
+            .SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
+        if (databaseTicket == null)
+            return null;
+
+        return new TicketModel
+        {
+            Id = databaseTicket.Id,
+            Name = databaseTicket.Name,
+            Number = databaseTicket.Number,
+            Type = (TicketType)databaseTicket.Type,
+            CreationDate = databaseTicket.CreationDate,
+            Creator = new TicketUserModel
+            {
+                Id = databaseTicket.CreatorId
+            },
+            Performer = new TicketUserModel
+            {
+                Id = databaseTicket.PerformerId
+            },
+            State = (TicketState)databaseTicket.State,
+            Priority = (TicketPriority)databaseTicket.Priority,
+            Description = databaseTicket.Description
+        };
+    }
+
     /// <inheritdoc/>
     public async Task<IReadOnlyCollection<TicketModel>> GetAllAsync(CancellationToken cancellationToken)
     {
@@ -80,17 +109,17 @@ public class TicketRepository : ITicketRepository
     /// <inheritdoc/>
     public async Task UpdateAsync(TicketEditModel editedTicket, CancellationToken cancellationToken)
     {
-        var ticket = await _appDbContext.Tickets
+        var databaseTicket = await _appDbContext.Tickets
             .SingleOrDefaultAsync(t => t.Id == editedTicket.Id, cancellationToken);
-        if(ticket == null)
+        if(databaseTicket == null)
             return;
 
-        ticket.Name = editedTicket.Name;
-        ticket.Type = (int)editedTicket.Type;
-        ticket.PerformerId = editedTicket.PerformerId;
-        ticket.State = (int)editedTicket.State;
-        ticket.Priority = (int)editedTicket.Priority;
-        ticket.Description = editedTicket.Description;
+        databaseTicket.Name = editedTicket.Name;
+        databaseTicket.Type = (int)editedTicket.Type;
+        databaseTicket.PerformerId = editedTicket.PerformerId;
+        databaseTicket.State = (int)editedTicket.State;
+        databaseTicket.Priority = (int)editedTicket.Priority;
+        databaseTicket.Description = editedTicket.Description;
 
         await _appDbContext.SaveChangesAsync(cancellationToken);
     }

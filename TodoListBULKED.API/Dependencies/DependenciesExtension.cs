@@ -54,7 +54,8 @@ public static class DependenciesExtension
         return services
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<CreateUserHandler>()
-            .AddScoped<CreateUserValidator>();
+            .AddScoped<CreateUserValidator>()
+            .AddScoped<EditUserHandler>();
     }
 
     private static IServiceCollection AddTicketDependencies(this IServiceCollection services)

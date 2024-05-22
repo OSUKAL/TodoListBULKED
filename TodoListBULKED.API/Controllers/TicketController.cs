@@ -114,7 +114,7 @@ public class TicketController : ControllerBase
     /// <param name="request">Запрос на редактирование задачи</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     [HttpPost("edit")]
-    public async Task<IActionResult> EditTicketAsync([FromBody] EditTicketRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> EditAsync([FromBody] EditTicketRequest request, CancellationToken cancellationToken)
     {
         var validationResult = ValidateEditTicketRequest(request);
         if (validationResult.IsFailed)
@@ -147,7 +147,7 @@ public class TicketController : ControllerBase
     private static Result ValidateEditTicketRequest(EditTicketRequest request)
     {
         if (request.Id == Guid.Empty)
-            return Result.Fail("Задача не существует");
+            return Result.Fail("Задача не указана");
 
         if (string.IsNullOrWhiteSpace(request.Name))
             return Result.Fail("Укажите название задачи");

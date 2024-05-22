@@ -39,10 +39,6 @@ public class LoginHandler
     {
         try
         {
-            var validationResult = ValidateRequest(request);
-            if (validationResult.IsFailed)
-                return validationResult;
-
             if (_httpContextAccessor.HttpContext == null)
                 return Result.Ok();
 
@@ -73,16 +69,5 @@ public class LoginHandler
 
             return Result.Fail(ErrorText);
         }
-    }
-
-    private static Result ValidateRequest(LoginRequest request)
-    {
-        if (string.IsNullOrWhiteSpace(request.Username))
-            return Result.Fail("Указано неверное имя пользователя");
-
-        if (string.IsNullOrWhiteSpace(request.Password))
-            return Result.Fail("Указан неверный пароль");
-
-        return Result.Ok();
     }
 }

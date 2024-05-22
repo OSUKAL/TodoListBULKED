@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 using TodoListBULKED.App.Abstractions;
-using TodoListBULKED.App.Models.Requests.Auth;
+using TodoListBULKED.App.Models.Requests.User;
 using TodoLIstBULKED.Infrastructure.Enums;
 
 namespace TodoListBULKED.App.Handlers.User.Validators;

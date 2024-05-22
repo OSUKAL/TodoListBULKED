@@ -11,22 +11,27 @@ public enum UserRole
     Unknown = 0,
     
     /// <summary>
+    /// Администратор
+    /// </summary>
+    Admin = 1,
+    
+    /// <summary>
     /// Руководитель команды
     /// </summary>
-    TeamLeader = 1,
+    TeamLeader = 2,
     
     /// <summary>
     /// Разработчик
     /// </summary>
-    Developer = 2,
+    Developer = 3,
     
     /// <summary>
     /// Тестировщик
     /// </summary>
-    Tester = 3,
+    Tester = 4,
     
     /// <summary>
     /// )))
     /// </summary>
-    Analyst = 4
+    Analyst = 5
 }

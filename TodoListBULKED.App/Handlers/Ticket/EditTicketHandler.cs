@@ -30,6 +30,10 @@ public class EditTicketHandler
     {
         try
         {
+            var ticket = await _ticketRepository.GetByIdAsync(request.Id, cancellationToken);
+            if (ticket == null)
+                return Result.Fail("Задача не найдена");
+            
             var ticketEdit = new TicketEditModel
             {
                 Id = request.Id,

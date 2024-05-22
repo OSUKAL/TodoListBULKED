@@ -17,12 +17,12 @@ public class UserTable
     /// <summary>
     /// Роль
     /// </summary>
-    public int Role { get; init; }
+    public int Role { get; internal set; }
     
     /// <summary>
     /// Имя пользователя
     /// </summary>
-    public string Username { get; init; }
+    public string Username { get; internal set; }
     
     /// <summary>
     /// Пароль

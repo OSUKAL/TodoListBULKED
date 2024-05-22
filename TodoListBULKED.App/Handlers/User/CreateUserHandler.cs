@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Handlers.User.Validators;
-using TodoListBULKED.App.Models.Requests.Auth;
+using TodoListBULKED.App.Models.Requests.User;
 using TodoListBULKED.App.Models.User;
 using TodoLIstBULKED.Infrastructure.Hashers;
 
