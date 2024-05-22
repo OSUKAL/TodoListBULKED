@@ -5,7 +5,6 @@ namespace TodoListBULKED.Data.Models;
 /// <summary>
 /// Таблица пользователей
 /// </summary>
-[PrimaryKey(nameof(Id), nameof(Username))]
 [Index(nameof(Username), IsUnique = true)]
 public class UserTable
 {
