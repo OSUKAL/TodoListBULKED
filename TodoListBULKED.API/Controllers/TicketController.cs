@@ -1,7 +1,9 @@
 ﻿using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TodoListBULKED.App.Handlers.Ticket;
 using TodoListBULKED.App.Models.Requests.Ticket;
+using TodoLIstBULKED.Infrastructure.Authorization;
 using TodoLIstBULKED.Infrastructure.Cookie;
 using TodoLIstBULKED.Infrastructure.Cookie.Constants;
 using TodoLIstBULKED.Infrastructure.Enums;
@@ -14,6 +16,7 @@ namespace TodoListBULKED.API.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/ticket")]
+[Authorize(Policy = AuthPolicyConstants.Authorized)]
 public class TicketController : ControllerBase
 {
     private readonly CreateTicketHandler _createTicketHandler;
@@ -61,6 +64,28 @@ public class TicketController : ControllerBase
 
         return Ok();
     }
+    
+    /// <summary>
+    /// Редактирование задачи
+    /// </summary>
+    /// <param name="request">Запрос на редактирование задачи</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    [HttpPost("edit")]
+    public async Task<IActionResult> EditAsync([FromBody] EditTicketRequest request, CancellationToken cancellationToken)
+    {
+        var validationResult = ValidateEditTicketRequest(request);
+        if (validationResult.IsFailed)
+            return BadRequest(validationResult.ErrorSummary());
+
+        var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
+        var userId = Guid.Parse(userIdResult.Value);
+        
+        var result = await _editTicketHandler.HandleAsync(request, userId, cancellationToken);
+        if (result.IsFailed)
+            return BadRequest(result.ErrorSummary());
+        
+        return Ok();
+    }
 
     /// <summary>
     /// Получение всех задач
@@ -99,32 +124,13 @@ public class TicketController : ControllerBase
     /// <param name="id">Идентификатор создателя</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     [HttpGet("get/creator")]
-    public async Task<IActionResult> GetCreatorTicketsAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCreatorTicketsAsync([FromQuery] Guid id, CancellationToken cancellationToken)
     {
         var result = await _getCreatorTicketsHandler.HandleAsync(id, cancellationToken);
         if (result.IsFailed)
             return BadRequest(result.ErrorSummary());
         
         return Ok(result.Value);
-    }
-
-    /// <summary>
-    /// Редактирование задачи
-    /// </summary>
-    /// <param name="request">Запрос на редактирование задачи</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
-    [HttpPost("edit")]
-    public async Task<IActionResult> EditAsync([FromBody] EditTicketRequest request, CancellationToken cancellationToken)
-    {
-        var validationResult = ValidateEditTicketRequest(request);
-        if (validationResult.IsFailed)
-            return BadRequest(validationResult.ErrorSummary());
-        
-        var result = await _editTicketHandler.HandleAsync(request, cancellationToken);
-        if (result.IsFailed)
-            return BadRequest(result.ErrorSummary());
-        
-        return Ok();
     }
 
     private static Result ValidateCreateTicketRequest(CreateTicketRequest request)

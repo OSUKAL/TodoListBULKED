@@ -25,14 +25,18 @@ public class EditTicketHandler
     /// Обработка изменения задачи
     /// </summary>
     /// <param name="request">Запрос на изменение задачи</param>
+    /// <param name="userId">Идентификатор пользотвателя</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
-    public async Task<Result> HandleAsync(EditTicketRequest request, CancellationToken cancellationToken)
+    public async Task<Result> HandleAsync(EditTicketRequest request, Guid userId, CancellationToken cancellationToken)
     {
         try
         {
             var ticket = await _ticketRepository.GetByIdAsync(request.Id, cancellationToken);
             if (ticket == null)
                 return Result.Fail("Задача не найдена");
+
+            if (ticket.Creator.Id != userId)
+                return Result.Fail("Вы не можете редактировать эту задачу");
             
             var ticketEdit = new TicketEditModel
             {

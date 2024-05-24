@@ -1,7 +1,9 @@
 ﻿using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TodoListBULKED.App.Handlers.User;
 using TodoListBULKED.App.Models.Requests.User;
+using TodoLIstBULKED.Infrastructure.Authorization;
 using TodoLIstBULKED.Infrastructure.Enums;
 using TodoLIstBULKED.Infrastructure.Extensions;
 
@@ -12,6 +14,7 @@ namespace TodoListBULKED.API.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/user")]
+[Authorize(Policy = AuthPolicyConstants.AdminOnly)]
 public class UserController : ControllerBase
 {
     private readonly CreateUserHandler _createUserHandler;

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TodoListBULKED.App.Handlers.Auth;
 using TodoListBULKED.App.Models.Requests.Auth;
+using TodoLIstBULKED.Infrastructure.Authorization;
 using TodoLIstBULKED.Infrastructure.Extensions;
 
 namespace TodoListBULKED.API.Controllers;
@@ -30,6 +31,7 @@ public class AuthController : ControllerBase
     /// <param name="request">Запрос на авторизацию</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<IActionResult> LogInAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
         var validationResult = ValidateLoginRequest(request);
@@ -46,8 +48,8 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Выход из аккаунта
     /// </summary>
-    [Authorize]
     [HttpGet("logout")]
+    [Authorize(Policy = AuthPolicyConstants.Authorized)]
     public async Task<IActionResult> LogOutAsync()
     {
         var result = await _logoutHandler.HandleAsync();

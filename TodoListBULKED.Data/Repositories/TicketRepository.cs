@@ -111,7 +111,7 @@ public class TicketRepository : ITicketRepository
     {
         var databaseTicket = await _appDbContext.Tickets
             .SingleOrDefaultAsync(t => t.Id == editedTicket.Id, cancellationToken);
-        if(databaseTicket == null)
+        if (databaseTicket == null)
             return;
 
         databaseTicket.Name = editedTicket.Name;

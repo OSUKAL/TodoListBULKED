@@ -31,7 +31,7 @@ public class CreateUserValidator
         if (request.Role == UserRole.Unknown)
             return Result.Fail("Не указана роль пользователя");
 
-        if (request.Password.Length < 9)
+        if (request.Password.Length < 8)
             return Result.Fail("Слишком короткий пароль");
         
         var user = await _userRepository.GetByUsernameAsync(request.Username, cancellationToken);

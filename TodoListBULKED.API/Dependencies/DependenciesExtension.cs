@@ -11,7 +11,10 @@ using TodoListBULKED.App.Utilities;
 using TodoListBULKED.Data.Configuration;
 using TodoListBULKED.Data.Context;
 using TodoListBULKED.Data.Repositories;
+using TodoLIstBULKED.Infrastructure.Authorization;
 using TodoLIstBULKED.Infrastructure.Cookie;
+using TodoLIstBULKED.Infrastructure.Cookie.Constants;
+using TodoLIstBULKED.Infrastructure.Enums;
 using TodoLIstBULKED.Infrastructure.Hashers;
 using TodoLIstBULKED.Infrastructure.Providers;
 
@@ -36,11 +39,15 @@ public static class DependenciesExtension
     {
         services
             .AddHttpContextAccessor()
-            .AddAuthorization()
+            .AddAuthorization(options =>
+                {
+                    options.AddPolicy(AuthPolicyConstants.AdminOnly, policy => policy.RequireClaim(CookieClaimConstants.UserRole, UserRole.Admin.ToString()));
+                    options.AddPolicy(AuthPolicyConstants.Authorized, policy => policy.RequireClaim(CookieClaimConstants.UserRole));
+                })
             .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = "/login";
+                options.LoginPath = "/api/auth/login";
             });
         
         return services
