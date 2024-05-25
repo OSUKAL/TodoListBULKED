@@ -19,14 +19,14 @@ public class LoginHandler
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IAuthRepository _authRepository;
     private readonly ILogger<LoginHandler> _logger;
-    private readonly IHasher _hasher;
+    private readonly IPasswordHasher _passwordHasher;
 
     /// <inheritdoc cref="LoginHandler"/>
-    public LoginHandler(IAuthRepository authRepository, ILogger<LoginHandler> logger, IHttpContextAccessor httpContextAccessor, IHasher hasher)
+    public LoginHandler(IAuthRepository authRepository, ILogger<LoginHandler> logger, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher)
     {
         _logger = logger;
         _httpContextAccessor = httpContextAccessor;
-        _hasher = hasher;
+        _passwordHasher = passwordHasher;
         _authRepository = authRepository;
     }
 
@@ -46,14 +46,14 @@ public class LoginHandler
             if (user == null)
                 return Result.Fail("Пользователь с таким именем пользователя не найден");
 
-            var isPasswordCorrect = _hasher.HashCompare(request.Password, user.PasswordHash);
+            var isPasswordCorrect = _passwordHasher.HashCompare(request.Password, user.PasswordHash);
             if (!isPasswordCorrect)
                 return Result.Fail("Неверный пароль");
 
             var claims = new List<Claim>
             {
                 new(CookieClaimConstants.UserId, user.Id.ToString()),
-                new(CookieClaimConstants.UserRole, user.Role.ToString())
+                new(CookieClaimConstants.Role, user.Role.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

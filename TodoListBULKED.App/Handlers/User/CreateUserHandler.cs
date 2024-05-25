@@ -15,15 +15,15 @@ public class CreateUserHandler
 {
     private readonly IUserRepository _userRepository;
     private readonly ILogger<CreateUserHandler> _logger;
-    private readonly IHasher _hasher;
+    private readonly IPasswordHasher _passwordHasher;
     private readonly CreateUserValidator _createUserValidator;
 
     /// <inheritdoc cref="CreateUserHandler"/> 
-    public CreateUserHandler(IUserRepository userRepository, ILogger<CreateUserHandler> logger, IHasher hasher, CreateUserValidator createUserValidator)
+    public CreateUserHandler(IUserRepository userRepository, ILogger<CreateUserHandler> logger, IPasswordHasher passwordHasher, CreateUserValidator createUserValidator)
     {
         _userRepository = userRepository;
         _logger = logger;
-        _hasher = hasher;
+        _passwordHasher = passwordHasher;
         _createUserValidator = createUserValidator;
     }
 
@@ -40,7 +40,7 @@ public class CreateUserHandler
             if (validationResult.IsFailed)
                 return validationResult;
             
-            var hashedPassword = _hasher.Hash(request.Password);
+            var hashedPassword = _passwordHasher.Hash(request.Password);
             
             var user = new UserModel
             {

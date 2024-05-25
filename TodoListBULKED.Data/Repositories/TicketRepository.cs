@@ -75,7 +75,7 @@ public class TicketRepository : ITicketRepository
     {
         var ticketsWithoutUsers = _appDbContext.Tickets;
 
-        var tickets = await JoinUsers(ticketsWithoutUsers)
+        var tickets = await JoinUsersQuery(ticketsWithoutUsers)
             .ToArrayAsync(cancellationToken);
         
         return tickets;
@@ -88,7 +88,7 @@ public class TicketRepository : ITicketRepository
             .Where(t => t.PerformerId == id);
             
 
-        var tickets = await JoinUsers(ticketsWithoutUsers)
+        var tickets = await JoinUsersQuery(ticketsWithoutUsers)
             .ToArrayAsync(cancellationToken);
         
         return tickets;
@@ -100,7 +100,7 @@ public class TicketRepository : ITicketRepository
         var ticketsWithoutUsers = _appDbContext.Tickets
             .Where(t => t.CreatorId == id);
 
-        var tickets = await JoinUsers(ticketsWithoutUsers)
+        var tickets = await JoinUsersQuery(ticketsWithoutUsers)
             .ToArrayAsync(cancellationToken);
 
         return tickets;
@@ -124,7 +124,7 @@ public class TicketRepository : ITicketRepository
         await _appDbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private IQueryable<TicketModel> JoinUsers(IQueryable<TicketTable> tickets)
+    private IQueryable<TicketModel> JoinUsersQuery(IQueryable<TicketTable> tickets)
     {
         return tickets
             .Join(_appDbContext.Users,

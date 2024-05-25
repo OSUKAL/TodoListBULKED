@@ -7,8 +7,6 @@ namespace TodoListBULKED.App.Abstractions;
 /// </summary>
 public interface IAuthRepository
 {
-    //TODO разобраться с репозиториями User/Auth
-    
     /// <summary>
     /// Получение записи пользователя по имени пользователя
     /// </summary>

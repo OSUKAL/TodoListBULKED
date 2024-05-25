@@ -31,7 +31,7 @@ public enum UserRole
     Tester = 4,
     
     /// <summary>
-    /// )))
+    /// Аналитик(
     /// </summary>
     Analyst = 5
 }

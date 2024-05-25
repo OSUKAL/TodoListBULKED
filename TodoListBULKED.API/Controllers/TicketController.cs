@@ -16,7 +16,7 @@ namespace TodoListBULKED.API.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/ticket")]
-[Authorize(Policy = AuthPolicyConstants.Authorized)]
+[Authorize(Policy = AuthPolicyConstants.Default)]
 public class TicketController : ControllerBase
 {
     private readonly CreateTicketHandler _createTicketHandler;
@@ -57,6 +57,8 @@ public class TicketController : ControllerBase
         
         var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
         var userId = Guid.Parse(userIdResult.Value);
+        if (userId == Guid.Empty)
+            return BadRequest("Непредвиденный результат при получении данных из cookie");
 
         var result = await _createTicketHandler.HandleAsync(request, userId, cancellationToken);
         if (result.IsFailed)
@@ -79,6 +81,8 @@ public class TicketController : ControllerBase
 
         var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
         var userId = Guid.Parse(userIdResult.Value);
+        if (userId == Guid.Empty)
+            return BadRequest("Непредвиденный результат при получении данных из cookie");
         
         var result = await _editTicketHandler.HandleAsync(request, userId, cancellationToken);
         if (result.IsFailed)
@@ -110,6 +114,8 @@ public class TicketController : ControllerBase
     {
         var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
         var userId = Guid.Parse(userIdResult.Value);
+        if (userId == Guid.Empty)
+            return BadRequest("Непредвиденный результат при получении данных из cookie");
 
         var result = await _getPerformerTicketsHandler.HandleAsync(userId, cancellationToken);
         if (result.IsFailed)

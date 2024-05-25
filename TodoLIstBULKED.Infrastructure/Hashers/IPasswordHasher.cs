@@ -3,13 +3,12 @@
 /// <summary>
 /// Хешер строк
 /// </summary>
-public interface IHasher
+public interface IPasswordHasher
 {
     /// <summary>
     /// Хеширование строки
     /// </summary>
     /// <param name="input">Хешируемая строка</param>
-    /// <returns></returns>
     string Hash(string input);
 
     /// <summary>
@@ -17,6 +16,5 @@ public interface IHasher
     /// </summary>
     /// <param name="input">Строка для сравнения</param>
     /// <param name="hash">Хеш строки</param>
-    /// <returns></returns>
     bool HashCompare(string input, string hash);
 }

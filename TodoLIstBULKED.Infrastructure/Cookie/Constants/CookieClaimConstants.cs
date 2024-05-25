@@ -13,5 +13,5 @@ public static class CookieClaimConstants
     /// <summary>
     /// Роль пользователя
     /// </summary>
-    public const string UserRole = "UserRole";
+    public const string Role = "Role";
 }

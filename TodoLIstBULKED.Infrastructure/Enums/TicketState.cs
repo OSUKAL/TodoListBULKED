@@ -28,5 +28,10 @@ public enum TicketState
     /// <summary>
     /// Ревью
     /// </summary>
-    Review = 4
+    Review = 4,
+    
+    /// <summary>
+    /// Работа над задачей приостановлена
+    /// </summary>
+    Paused = 5
 }

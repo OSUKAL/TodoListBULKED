@@ -31,12 +31,9 @@ public class EditTicketHandler
     {
         try
         {
-            var ticket = await _ticketRepository.GetByIdAsync(request.Id, cancellationToken);
-            if (ticket == null)
-                return Result.Fail("Задача не найдена");
-
-            if (ticket.Creator.Id != userId)
-                return Result.Fail("Вы не можете редактировать эту задачу");
+            var validationResult = await ValidateAsync(request.Id, userId, cancellationToken);
+            if (validationResult.IsFailed)
+                return validationResult;
             
             var ticketEdit = new TicketEditModel
             {
@@ -60,5 +57,17 @@ public class EditTicketHandler
 
             return Result.Fail(ErrorText);
         }
+    }
+
+    private async Task<Result> ValidateAsync(Guid ticketId, Guid userId, CancellationToken cancellationToken)
+    {
+        var ticket = await _ticketRepository.GetByIdAsync(ticketId, cancellationToken);
+        if (ticket == null)
+            return Result.Fail("Задача не найдена");
+        
+        if (ticket.Creator.Id != userId)
+            return Result.Fail("Вы не можете редактировать эту задачу");
+        
+        return Result.Ok();
     }
 }

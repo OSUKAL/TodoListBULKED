@@ -3,7 +3,7 @@
 namespace TodoLIstBULKED.Infrastructure.Hashers;
 
 /// <inheritdoc/>
-public class Hasher : IHasher           
+public class PasswordHasher : IPasswordHasher           
 {
     private const int SaltLength = 16;
     private const int HashLength = 16;

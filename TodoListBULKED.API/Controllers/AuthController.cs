@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
     /// Выход из аккаунта
     /// </summary>
     [HttpGet("logout")]
-    [Authorize(Policy = AuthPolicyConstants.Authorized)]
+    [Authorize(Policy = AuthPolicyConstants.Default)]
     public async Task<IActionResult> LogOutAsync()
     {
         var result = await _logoutHandler.HandleAsync();

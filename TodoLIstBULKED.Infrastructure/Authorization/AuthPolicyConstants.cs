@@ -13,5 +13,5 @@ public static class AuthPolicyConstants
     /// <summary>
     /// Только авторизированные пользователи
     /// </summary>
-    public const string Authorized = "Authorized";
+    public const string Default = "Default";
 }

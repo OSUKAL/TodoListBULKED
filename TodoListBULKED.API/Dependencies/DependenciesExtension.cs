@@ -41,8 +41,8 @@ public static class DependenciesExtension
             .AddHttpContextAccessor()
             .AddAuthorization(options =>
                 {
-                    options.AddPolicy(AuthPolicyConstants.AdminOnly, policy => policy.RequireClaim(CookieClaimConstants.UserRole, UserRole.Admin.ToString()));
-                    options.AddPolicy(AuthPolicyConstants.Authorized, policy => policy.RequireClaim(CookieClaimConstants.UserRole));
+                    options.AddPolicy(AuthPolicyConstants.AdminOnly, policy => policy.RequireClaim(CookieClaimConstants.Role, UserRole.Admin.ToString()));
+                    options.AddPolicy(AuthPolicyConstants.Default, policy => policy.RequireClaim(CookieClaimConstants.Role));
                 })
             .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -85,7 +85,7 @@ public static class DependenciesExtension
             .AddMemoryCache()
             .AddSingleton<TimeProvider, MainTimeProvider>()
             .AddSingleton<EnumDescriptionProvider>()
-            .AddScoped<IHasher, Hasher>()
+            .AddScoped<IPasswordHasher, PasswordHasher>()
             .AddScoped<ICookieGetter, CookieGetter>()
             .Configure<AppConfig>(configuration)
             .AddSwaggerGen();
