@@ -58,7 +58,7 @@ public class TicketController : ControllerBase
         var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
         var userId = Guid.Parse(userIdResult.Value);
         if (userId == Guid.Empty)
-            return BadRequest("Непредвиденный результат при получении данных из cookie");
+            return BadRequest("Не удалось получить идентификатор авторизованного пользователя");
 
         var result = await _createTicketHandler.HandleAsync(request, userId, cancellationToken);
         if (result.IsFailed)
@@ -82,7 +82,7 @@ public class TicketController : ControllerBase
         var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
         var userId = Guid.Parse(userIdResult.Value);
         if (userId == Guid.Empty)
-            return BadRequest("Непредвиденный результат при получении данных из cookie");
+            return BadRequest("Не удалось получить идентификатор авторизованного пользователя");
         
         var result = await _editTicketHandler.HandleAsync(request, userId, cancellationToken);
         if (result.IsFailed)
@@ -115,7 +115,7 @@ public class TicketController : ControllerBase
         var userIdResult = _cookieGetter.GetValueFromCookie(CookieClaimConstants.UserId);
         var userId = Guid.Parse(userIdResult.Value);
         if (userId == Guid.Empty)
-            return BadRequest("Непредвиденный результат при получении данных из cookie");
+            return BadRequest("Не удалось получить идентификатор авторизованного пользователя");
 
         var result = await _getPerformerTicketsHandler.HandleAsync(userId, cancellationToken);
         if (result.IsFailed)

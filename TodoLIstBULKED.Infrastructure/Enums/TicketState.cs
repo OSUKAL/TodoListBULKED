@@ -31,7 +31,7 @@ public enum TicketState
     Review = 4,
     
     /// <summary>
-    /// Работа над задачей приостановлена
+    /// Приостановлена
     /// </summary>
     Paused = 5
 }
