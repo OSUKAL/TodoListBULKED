@@ -1,4 +1,6 @@
-﻿namespace TodoListBULKED.App.Models.User;
+﻿using TodoLIstBULKED.Infrastructure.Enums;
+
+namespace TodoListBULKED.App.Models.User;
 
 /// <summary>
 /// Модель данных пользователя
@@ -11,6 +13,11 @@ public class UserModel
     public Guid Id { get; init; }
     
     /// <summary>
+    /// Роль
+    /// </summary>
+    public UserRole Role { get; init; }
+    
+    /// <summary>
     /// Имя пользователя
     /// </summary>
     public string Username { get; init; }
@@ -18,5 +25,5 @@ public class UserModel
     /// <summary>
     /// Пароль
     /// </summary>
-    public string Password { get; init; }
+    public string PasswordHash { get; init; }
 }

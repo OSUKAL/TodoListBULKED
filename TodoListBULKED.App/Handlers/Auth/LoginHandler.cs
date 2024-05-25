@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Models.Requests.Auth;
+using TodoLIstBULKED.Infrastructure.Cookie.Constants;
+using TodoLIstBULKED.Infrastructure.Hashers;
 
 namespace TodoListBULKED.App.Handlers.Auth;
 
@@ -15,15 +17,17 @@ namespace TodoListBULKED.App.Handlers.Auth;
 public class LoginHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IUserRepository _userRepository;
+    private readonly IAuthRepository _authRepository;
     private readonly ILogger<LoginHandler> _logger;
+    private readonly IPasswordHasher _passwordHasher;
 
     /// <inheritdoc cref="LoginHandler"/>
-    public LoginHandler(IUserRepository userRepository, ILogger<LoginHandler> logger, IHttpContextAccessor httpContextAccessor)
+    public LoginHandler(IAuthRepository authRepository, ILogger<LoginHandler> logger, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher)
     {
-        _userRepository = userRepository;
         _logger = logger;
         _httpContextAccessor = httpContextAccessor;
+        _passwordHasher = passwordHasher;
+        _authRepository = authRepository;
     }
 
     /// <summary>
@@ -35,27 +39,24 @@ public class LoginHandler
     {
         try
         {
-            var validationResult = ValidateRequest(request);
-            if (validationResult.IsFailed)
-                return validationResult;
-
             if (_httpContextAccessor.HttpContext == null)
                 return Result.Ok();
 
-            var user = await _userRepository.GetByUsernameAsync(request.Username, cancellationToken);
+            var user = await _authRepository.GetByUsernameAsync(request.Username, cancellationToken);
             if (user == null)
                 return Result.Fail("Пользователь с таким именем пользователя не найден");
 
-            var passwordChecked = PasswordCheck(request.Password, user.Password);
-            if (!passwordChecked)
+            var isPasswordCorrect = _passwordHasher.HashCompare(request.Password, user.PasswordHash);
+            if (!isPasswordCorrect)
                 return Result.Fail("Неверный пароль");
 
             var claims = new List<Claim>
             {
-                new("UserId", user.Id.ToString())
+                new(CookieClaimConstants.UserId, user.Id.ToString()),
+                new(CookieClaimConstants.Role, user.Role.ToString())
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
             
@@ -63,26 +64,10 @@ public class LoginHandler
         }
         catch (Exception exception)
         {
-            const string errorText = "При авторизации возникла ошибка";
-            _logger.LogError(exception, errorText);
+            const string ErrorText = "При авторизации возникла ошибка";
+            _logger.LogError(exception, ErrorText);
 
-            return Result.Fail(errorText);
+            return Result.Fail(ErrorText);
         }
-    }
-
-    private Result ValidateRequest(LoginRequest request)
-    {
-        if (string.IsNullOrWhiteSpace(request.Username))
-            return Result.Fail("Указано неверное имя пользователя");
-
-        if (string.IsNullOrWhiteSpace(request.Password))
-            return Result.Fail("Указан неверный пароль");
-
-        return Result.Ok();
-    }
-
-    private bool PasswordCheck(string loginPassword, string userPassword)
-    {
-        return loginPassword.Equals(userPassword);
     }
 }

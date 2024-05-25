@@ -1,6 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using TodoLIstBULKED.Infrastructure.Enums;
 
-namespace TodoListBULKED.App.Models.Requests.Auth;
+namespace TodoListBULKED.App.Models.Requests.User;
 
 /// <summary>
 /// Запрос на создание пользователя
@@ -12,6 +14,13 @@ public class CreateUserRequest
     /// </summary>
     [JsonPropertyName("username")]
     public string Username { get; init; }
+    
+    /// <summary>
+    /// Роль
+    /// </summary>
+    [JsonPropertyName("role")]
+    [EnumDataType(typeof(UserRole))]
+    public UserRole Role { get; init; }
     
     /// <summary>
     /// Пароль

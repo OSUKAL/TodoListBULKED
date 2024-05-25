@@ -1,5 +1,4 @@
-﻿using TodoListBULKED.App.Models;
-using TodoListBULKED.App.Models.User;
+﻿using TodoListBULKED.App.Models.User;
 
 namespace TodoListBULKED.App.Abstractions;
 
@@ -14,11 +13,25 @@ public interface IUserRepository
     /// <param name="userModel">Данные пользователя</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     Task InsertAsync(UserModel userModel, CancellationToken cancellationToken);
-
+    
     /// <summary>
-    /// Получение записи пользователя по имени
+    /// Получение записи пользователя по имени пользователя
     /// </summary>
     /// <param name="username">Имя пользователя</param>
-    /// <param name="cancellationToken">Токен омтены операции</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
     Task<UserModel?> GetByUsernameAsync(string username, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получение записи пользователя по идентификатору
+    /// </summary>
+    /// <param name="userId">Имя пользователя</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    Task<UserModel?> GetByIdAsync(Guid userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Изменение записи пользователя
+    /// </summary>
+    /// <param name="editedUser">Данные пользователя</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    Task UpdateAsync(UserEditModel editedUser, CancellationToken cancellationToken);
 }

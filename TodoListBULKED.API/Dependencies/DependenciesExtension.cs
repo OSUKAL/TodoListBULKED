@@ -5,10 +5,18 @@ using Npgsql;
 using TodoListBULKED.App.Abstractions;
 using TodoListBULKED.App.Handlers.Auth;
 using TodoListBULKED.App.Handlers.Ticket;
+using TodoListBULKED.App.Handlers.User;
+using TodoListBULKED.App.Handlers.User.Validators;
+using TodoListBULKED.App.Utilities;
 using TodoListBULKED.Data.Configuration;
 using TodoListBULKED.Data.Context;
 using TodoListBULKED.Data.Repositories;
-using TodoLIstBULKED.Inrastructure.Cookie;
+using TodoLIstBULKED.Infrastructure.Authorization;
+using TodoLIstBULKED.Infrastructure.Cookie;
+using TodoLIstBULKED.Infrastructure.Cookie.Constants;
+using TodoLIstBULKED.Infrastructure.Enums;
+using TodoLIstBULKED.Infrastructure.Hashers;
+using TodoLIstBULKED.Infrastructure.Providers;
 
 namespace TodoListBULKED.API.Dependencies;
 
@@ -23,6 +31,7 @@ public static class DependenciesExtension
             .AddBaseDependencies(configuration)
             .AddDatabaseDependencies()
             .AddAuthDependencies()
+            .AddUserDependencies()
             .AddTicketDependencies();
     }
 
@@ -30,25 +39,42 @@ public static class DependenciesExtension
     {
         services
             .AddHttpContextAccessor()
-            .AddAuthorization()
+            .AddAuthorization(options =>
+                {
+                    options.AddPolicy(AuthPolicyConstants.AdminOnly, policy => policy.RequireClaim(CookieClaimConstants.Role, UserRole.Admin.ToString()));
+                    options.AddPolicy(AuthPolicyConstants.Default, policy => policy.RequireClaim(CookieClaimConstants.Role));
+                })
             .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = "/login";
+                options.LoginPath = "/api/auth/login";
             });
         
         return services
-            .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped<CreateUserHandler>()
+            .AddScoped<IAuthRepository, AuthRepository>()
             .AddScoped<LoginHandler>()
             .AddScoped<LogoutHandler>();
+    }
+
+    private static IServiceCollection AddUserDependencies(this IServiceCollection services)
+    {
+        return services
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<CreateUserHandler>()
+            .AddScoped<CreateUserValidator>()
+            .AddScoped<EditUserHandler>();
     }
 
     private static IServiceCollection AddTicketDependencies(this IServiceCollection services)
     {
         return services
             .AddScoped<ITicketRepository, TicketRepository>()
-            .AddScoped<CreateTicketHandler>();
+            .AddScoped<CreateTicketHandler>()
+            .AddScoped<TicketNumberUtility>()
+            .AddScoped<GetTicketsHandler>()
+            .AddScoped<GetPerformerTicketsHandler>()
+            .AddScoped<GetCreatorTicketsHandler>()
+            .AddScoped<EditTicketHandler>();
     }
 
     private static IServiceCollection AddBaseDependencies(this IServiceCollection services, IConfiguration configuration)
@@ -56,6 +82,10 @@ public static class DependenciesExtension
         services.AddControllers();
 
         return services
+            .AddMemoryCache()
+            .AddSingleton<TimeProvider, MainTimeProvider>()
+            .AddSingleton<EnumDescriptionProvider>()
+            .AddScoped<IPasswordHasher, PasswordHasher>()
             .AddScoped<ICookieGetter, CookieGetter>()
             .Configure<AppConfig>(configuration)
             .AddSwaggerGen();
@@ -74,7 +104,7 @@ public static class DependenciesExtension
                 Username = databaseConfig.Username,
                 Password = databaseConfig.Password
             };
-
+            
             options.UseNpgsql(connectionStringBuilder.ConnectionString);
         });
     }

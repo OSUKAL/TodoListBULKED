@@ -1,10 +1,10 @@
 ﻿using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TodoListBULKED.App.Handlers;
 using TodoListBULKED.App.Handlers.Auth;
-using TodoListBULKED.App.Models.Requests;
 using TodoListBULKED.App.Models.Requests.Auth;
+using TodoLIstBULKED.Infrastructure.Authorization;
+using TodoLIstBULKED.Infrastructure.Extensions;
 
 namespace TodoListBULKED.API.Controllers;
 
@@ -15,35 +15,14 @@ namespace TodoListBULKED.API.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly CreateUserHandler _createUserHandler;
     private readonly LoginHandler _loginHandler;
     private readonly LogoutHandler _logoutHandler;
 
     /// <inheritdoc cref="AuthController"/>
-    public AuthController(CreateUserHandler createUserHandler, LoginHandler loginHandler, LogoutHandler logoutHandler)
+    public AuthController(LoginHandler loginHandler, LogoutHandler logoutHandler)
     {
-        _createUserHandler = createUserHandler;
         _loginHandler = loginHandler;
         _logoutHandler = logoutHandler;
-    }
-
-    /// <summary>
-    /// Создание пользователя
-    /// </summary>
-    /// <param name="request">Запрос на создание пользователя</param>
-    /// <param name="cancellationToken">Токен отмены операции</param>
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
-    {
-        var validationResult = ValidateCreateUserRequest(request);
-        if (validationResult.IsFailed)
-            return BadRequest(validationResult.Errors[0].ToString());
-
-        var result = await _createUserHandler.HandleAsync(request, cancellationToken);
-        if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
-
-        return Ok();
     }
 
     /// <summary>
@@ -52,15 +31,16 @@ public class AuthController : ControllerBase
     /// <param name="request">Запрос на авторизацию</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<IActionResult> LogInAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
         var validationResult = ValidateLoginRequest(request);
         if (validationResult.IsFailed)
-            return BadRequest(validationResult.Errors[0].ToString());
+            return BadRequest(validationResult.ErrorSummary());
             
         var result = await _loginHandler.HandleAsync(request, cancellationToken);
         if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
+            return BadRequest(result.ErrorSummary());
 
         return Ok();
     }
@@ -68,29 +48,18 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Выход из аккаунта
     /// </summary>
-    [Authorize]
     [HttpGet("logout")]
+    [Authorize(Policy = AuthPolicyConstants.Default)]
     public async Task<IActionResult> LogOutAsync()
     {
         var result = await _logoutHandler.HandleAsync();
         if (result.IsFailed)
-            return BadRequest(result.Errors[0].ToString());
+            return BadRequest(result.ErrorSummary());
 
         return Ok();
     }
-
-    private Result ValidateCreateUserRequest(CreateUserRequest request)
-    {
-        if (string.IsNullOrWhiteSpace(request.Username))
-            return Result.Fail("Укажите имя пользователя");
-        
-        if (string.IsNullOrWhiteSpace(request.Password))
-            return Result.Fail("Укажите пароль");
-
-        return Result.Ok();
-    }
     
-    private Result ValidateLoginRequest(LoginRequest request)
+    private static Result ValidateLoginRequest(LoginRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Username))
             return Result.Fail("Введите имя пользователя");

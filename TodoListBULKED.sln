@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoListBULKED.App", "TodoL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoListBULKED.Data", "TodoListBULKED.Data\TodoListBULKED.Data.csproj", "{ECB33F1D-33B6-4875-9EE2-83F8617D6F68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoLIstBULKED.Inrastructure", "TodoLIstBULKED.Inrastructure\TodoLIstBULKED.Inrastructure.csproj", "{3A9A9B77-709D-4762-862B-E10DB1628058}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoLIstBULKED.Infrastructure", "TodoLIstBULKED.Infrastructure\TodoLIstBULKED.Infrastructure.csproj", "{3A9A9B77-709D-4762-862B-E10DB1628058}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,5 +1,4 @@
-﻿using TodoListBULKED.App.Models;
-using TodoListBULKED.App.Models.Ticket;
+﻿using TodoListBULKED.App.Models.Ticket;
 
 namespace TodoListBULKED.App.Abstractions;
 
@@ -11,14 +10,41 @@ public interface ITicketRepository
     /// <summary>
     /// Создание записи задачи
     /// </summary>
-    /// <param name="ticketModel">Данные задачи</param>
+    /// <param name="ticket">Данные задачи</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
-    Task InsertAsync(TicketModel ticketModel, CancellationToken cancellationToken);
+    Task InsertAsync(TicketModel ticket, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Получение записи задачи по идентификатору пользователя
+    /// Получение записи задачи по идентификатору
     /// </summary>
-    /// <param name="id">Идентификатор пользователя</param>
+    /// <param name="id">Идентификатор</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
-    Task<TicketModel?> GetByUserIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<TicketModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Получение всех записей задач
+    /// </summary>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    Task<IReadOnlyCollection<TicketModel>> GetAllAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получение записей задач исполнителя
+    /// </summary>
+    /// <param name="id">Идентификатор исполнителя</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    Task<IReadOnlyCollection<TicketModel>> GetByPerformerIdAsync(Guid id, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Получение записей задач создателя
+    /// </summary>
+    /// <param name="id">Идентификатор создателя</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    Task<IReadOnlyCollection<TicketModel>> GetByCreatorIdAsync(Guid id, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Изменение записи задачи
+    /// </summary>
+    /// <param name="ticketEdit">Данные задачи</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    Task UpdateAsync(TicketEditModel ticketEdit, CancellationToken cancellationToken);
 }
