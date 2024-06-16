@@ -10,6 +10,6 @@ namespace TodoListBULKED.App.Models.Responses.Ticket;
 public record TicketUserDto(
     [property: JsonPropertyName("id")] 
     Guid Id,
-    [property: JsonPropertyName("name")] 
+    [property: JsonPropertyName("username")] 
     string Name
 );
