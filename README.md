@@ -25,7 +25,8 @@ cd TodoListBULKED
 ### Настройка базы данных
 
 1. Откройте файл `TodoListBULKED.API/appsettings.Development.json`.
-2. Отредактируйте объект `DatabaseConfig`, указав параметры подключения к вашей базе данных PostgreSQL. 
+2. Отредактируйте объект `DatabaseConfig`, указав параметры подключения к вашей базе данных PostgreSQL.
+
 Пример:
    ```json
    {
