@@ -41,7 +41,7 @@ cd TodoListBULKED
    ```
    Где `<database_name>` название вашей бд, `<username>` имя пользователя postgres, `<password>` пароль пользователя postgres.
    
-4. Примените миграции, чтобы создать необходимые таблицы:
+3. Примените миграции, чтобы создать необходимые таблицы:
 
 ```bash
 dotnet ef database update --project TodoListBULKED.Data --startup-project TodoListBULKED.API --context TodoListBULKED.Data.Context.AppDbContext
